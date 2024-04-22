@@ -19,7 +19,7 @@ const BDOGrotesk = localFont({
 });
 
 export const metadata: Metadata = {
-    title: "Piggy DEX",
+    title: "Piggy DEX App",
     description: "Best DEX on Conflux Network",
 };
 
