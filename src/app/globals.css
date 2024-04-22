@@ -2,32 +2,56 @@
 @tailwind components;
 @tailwind utilities;
 
+.test {
+  color: #ffbdd74d;
+}
+
 :root {
-  --foreground-rgb: 0, 0, 0;
-  --background-start-rgb: 214, 219, 220;
-  --background-end-rgb: 255, 255, 255;
-}
+  --background: 0 0% 10%;
+  --foreground: 0 0% 100%;
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --foreground-rgb: 255, 255, 255;
-    --background-start-rgb: 0, 0, 0;
-    --background-end-rgb: 0, 0, 0;
-  }
-}
+  --primary: 338 73% 81%;
+  --primary-foreground: 338 19% 34%;
 
-body {
-  color: rgb(var(--foreground-rgb));
-  background: linear-gradient(
-      to bottom,
-      transparent,
-      rgb(var(--background-end-rgb))
-    )
-    rgb(var(--background-start-rgb));
+  --secondary: 210 40% 96.1%;
+  --secondary-foreground: 222.2 47.4% 11.2%;
+
+  --destructive: 0 84.2% 60.2%;
+  --destructive-foreground: 210 40% 98%;
+
+  --muted: 210 40% 96.1%;
+  --muted-foreground: 215.4 16.3% 46.9%;
+
+  --accent: 338 31% 54%;
+  --accent-foreground: 338 19% 34%;
+
+  --border: 345 4% 19%;
+
+  --text-light: 337 45% 94%;
+
+  --radius: 0.5rem;
 }
 
 @layer utilities {
   .text-balance {
     text-wrap: balance;
   }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+}
+
+.hidden-scroll-bar {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.hidden-scroll-bar::-webkit-scrollbar {
+  display: none;
 }
