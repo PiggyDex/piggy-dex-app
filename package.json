@@ -9,6 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@ebay/nice-modal-react": "^1.2.13",
     "@rainbow-me/rainbowkit": "2",
     "@rainbow-me/rainbowkit-siwe-next-auth": "^0.4.0",
     "@tanstack/react-query": "^5.29.2",
