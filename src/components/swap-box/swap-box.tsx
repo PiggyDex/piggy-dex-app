@@ -42,6 +42,20 @@ export const SwapBox: FC = () => {
     }
   };
 
+  const handleTokenAmountChange = (
+    event: React.ChangeEvent<HTMLInputElement>,
+  ) => {
+    const value = event.target.value;
+    // check value only contains numbers and smaller than 1e18
+    if (!/^\d*\.?\d*$/.test(value)) {
+      return;
+    }
+    if (parseFloat(value) > 1e18) {
+      return;
+    }
+    setTokenAmountA(parseFloat(event.target.value));
+  };
+
   const handleSwap = async () => {
     // await a timeout
     setSwapping(true);
@@ -88,6 +102,7 @@ export const SwapBox: FC = () => {
               tokenSymbol={tokenSymbolA}
               tokenAmount={tokenAmountA}
               accountBalance={5}
+              handleInputChange={handleTokenAmountChange}
             />
           </div>
           <button
@@ -124,7 +139,7 @@ export const SwapBox: FC = () => {
         <hr />
         <div className="flex justify-center items-center">
           <button
-            className={`inline-flex border rounded-lg text-[#F1D4DB] font-bold border-[#BF697E] px-12 py-3 space-x-2 bg-[#FBF1F3] hover:bg-[#BF697E] ${swapping ? "bg-[#BF697E]" : ""}`}
+            className={`inline-flex border rounded-lg text-[#F1D4DB] font-bold border-[#BF697E] px-12 py-3 space-x-2 ${swapping ? "bg-[#BF697E]" : "bg-[#FBF1F3]"}  hover:bg-[#BF697E]`}
             onClick={() => handleSwap()}
           >
             <span>Swap now</span>
