@@ -1,5 +1,5 @@
 import Image from "next/image";
-import { type FC, useState } from "react";
+import { type FC } from "react";
 
 type TokenBoxProps = {
   tokenSymbol: string;
