@@ -21,6 +21,7 @@
   },
   "plugins": ["prettier", "import", "@typescript-eslint", "sort-export-all"],
   "rules": {
+    "indent": ["error", 2],
     "prettier/prettier": "error",
     "react/jsx-no-target-blank": "warn",
     "react/jsx-boolean-value": "error",
