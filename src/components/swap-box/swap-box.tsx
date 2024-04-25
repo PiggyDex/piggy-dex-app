@@ -32,19 +32,20 @@ export const SwapBox: FC = () => {
   const [swapping, setSwapping] = useState<boolean>(false);
   const [tokenSymbolA, setTokenSymbolA] = useState<string>("BTC");
   const [tokenSymbolB, setTokenSymbolB] = useState<string>("WBTC");
-  const [tokenAmountA, setTokenAmountA] = useState<number>(1);
+  const [tokenAmountA, setTokenAmountA] = useState<string>("1");
 
   const toggleActiveState = (index: number) => {
     if (isActives[index]) {
       setIsActives((prev) => prev.map((_, i) => (i === index ? false : false)));
     } else {
       setIsActives((prev) => prev.map((_, i) => (i === index ? true : false)));
-      setTokenAmountA((percentageValues[index] / 100) * 5);
+      setTokenAmountA(((percentageValues[index] / 100) * 5).toString());
     }
   };
 
   const handleTokenAmountChange: InputNumberProps["onChange"] = (value) => {
-    setTokenAmountA(value as number);
+    setTokenAmountA(parseFloat(value as string).toString());
+    setIsActives(new Array(percentageValues.length).fill(false));
   };
 
   const handleSwap = async () => {

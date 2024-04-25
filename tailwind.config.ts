@@ -7,6 +7,7 @@ const config: Config = {
     "./src/app/**/*.{js,ts,jsx,tsx,mdx}",
   ],
   prefix: "",
+  important: "body",
   theme: {
     container: {
       center: true,
