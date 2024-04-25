@@ -1,5 +1,6 @@
 "use client";
 
+import { type InputNumberProps } from "antd";
 import Image from "next/image";
 import { type FC, useEffect, useState } from "react";
 
@@ -42,18 +43,8 @@ export const SwapBox: FC = () => {
     }
   };
 
-  const handleTokenAmountChange = (
-    event: React.ChangeEvent<HTMLInputElement>,
-  ) => {
-    const value = event.target.value;
-    // check value only contains numbers and smaller than 1e18
-    if (!/^\d*\.?\d*$/.test(value)) {
-      return;
-    }
-    if (parseFloat(value) > 1e18) {
-      return;
-    }
-    setTokenAmountA(parseFloat(event.target.value));
+  const handleTokenAmountChange: InputNumberProps["onChange"] = (value) => {
+    setTokenAmountA(value as number);
   };
 
   const handleSwap = async () => {
