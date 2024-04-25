@@ -1,3 +1,4 @@
+import { AntdRegistry } from "@ant-design/nextjs-registry";
 import { type Metadata } from "next";
 import localFont from "next/font/local";
 
@@ -33,7 +34,9 @@ export default function RootLayout({
       <head>
         <link rel="icon" href="/favicon.ico" />
       </head>
-      <body className={BDOGrotesk.className}>{children}</body>
+      <body className={BDOGrotesk.className}>
+        <AntdRegistry>{children}</AntdRegistry>
+      </body>
     </html>
   );
 }
