@@ -3,7 +3,7 @@
 @tailwind utilities;
 
 .test {
-  color: #ffbdd74d;
+color: hsl(0, 0%, 80%);
 }
 
 :root {
@@ -25,6 +25,10 @@
   --accent: 338 31% 54%;
   --accent-foreground: 338 19% 34%;
 
+  --navbar-background: 0 0% 15%;
+  --navbar-foreground: 348 56% 96%;
+
+
   --border: 345 4% 19%;
 
   --text-light: 337 45% 94%;
@@ -43,7 +47,7 @@
     @apply border-border;
   }
   body {
-    @apply bg-background text-foreground;
+    @apply bg-white/80 text-black;
   }
 }
 

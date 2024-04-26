@@ -24,6 +24,10 @@ const config: Config = {
         textLight: "hsl(var(--text-light))",
         background: "hsl(var(--background))",
         foreground: "hsl(var(--foreground))",
+        navbar: {
+          DEFAULT: "hsl(var(--navbar-background))",
+          foreground: "hsl(var(--navbar-foreground)",
+        },
         primary: {
           DEFAULT: "hsl(var(--primary))",
           foreground: "hsl(var(--primary-foreground))",
