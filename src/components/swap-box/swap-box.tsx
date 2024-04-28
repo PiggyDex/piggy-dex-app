@@ -56,9 +56,9 @@ export const SwapBox: FC = () => {
   };
 
   return (
-    <div className="px-16 container">
-      <div className="p-6 bg-white w-full rounded-lg shadow-md text-black space-y-4 divide-y-1 divide-pink-400/25 divide-solid">
-        <div className="flex space-x-8 justify-between">
+    <div className="container px-16">
+      <div className="divide-y-1 w-full space-y-4 divide-solid divide-pink-400/25 rounded-lg bg-white p-6 text-black shadow-md">
+        <div className="flex justify-between space-x-8">
           <div className="text-xl font-normal">Swap</div>
           <div className="flex space-x-4">
             <RefeshCountSwapBox currentCount={currentCount} />
@@ -72,9 +72,9 @@ export const SwapBox: FC = () => {
         </div>
         <hr />
         <div className="flex space-x-9">
-          <div className="flex-col w-1/2 space-y-4">
-            <div className="flex space-x-2 justify-between w-full">
-              <div className="flex space-x-2 justify-between">
+          <div className="w-1/2 flex-col space-y-4">
+            <div className="flex w-full justify-between space-x-2">
+              <div className="flex justify-between space-x-2">
                 <div className="flex">You pay</div>
                 {percentageValues.map((value, index) => (
                   <PercentageButton
@@ -98,7 +98,7 @@ export const SwapBox: FC = () => {
             />
           </div>
           <button
-            className="flex m-12"
+            className="m-12 flex"
             onClick={() => {
               // swap token symbols
               const temp = tokenSymbolA;
@@ -113,8 +113,8 @@ export const SwapBox: FC = () => {
               height={32}
             />
           </button>
-          <div className="flex-col w-1/2 space-y-4">
-            <div className="flex space-x-2 justify-between w-full">
+          <div className="w-1/2 flex-col space-y-4">
+            <div className="flex w-full justify-between space-x-2">
               You receive (Est.)
             </div>
             <TokenBox
@@ -129,9 +129,9 @@ export const SwapBox: FC = () => {
           <Image src="/swap-drop.svg" alt="swap-drop" width={16} height={16} />
         </div>
         <hr />
-        <div className="flex justify-center items-center">
+        <div className="flex items-center justify-center">
           <button
-            className={`inline-flex border rounded-lg text-[#F1D4DB] font-bold border-[#BF697E] px-12 py-3 space-x-2 ${swapping ? "bg-[#BF697E]" : "bg-[#FBF1F3]"}  hover:bg-[#BF697E]`}
+            className={`inline-flex space-x-2 rounded-lg border border-[#BF697E] px-12 py-3 font-bold text-[#F1D4DB] ${swapping ? "bg-[#BF697E]" : "bg-[#FBF1F3]"}  hover:bg-[#BF697E]`}
             onClick={() => handleSwap()}
           >
             <span>Swap now</span>
