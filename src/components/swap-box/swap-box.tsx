@@ -98,6 +98,8 @@ export const SwapBox: FC = () => {
             />
           </div>
           <button
+            title="Swap Tokens"
+            type="button"
             className="m-12 flex"
             onClick={() => {
               // swap token symbols
