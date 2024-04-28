@@ -16,16 +16,16 @@ export const TokenBox: FC<TokenBoxProps> = ({
   handleInputChange,
 }) => {
   return (
-    <div className="bg-[#FBF1F3] flex-col rounded-lg border py-4 px-6 space-y-3">
-      <div className="direction-rtl flex justify-between items-center w-full">
-        <div className="flex space-x-1 items-center ">
+    <div className="flex-col space-y-3 rounded-lg border bg-[#FBF1F3] px-6 py-4">
+      <div className="direction-rtl flex w-full items-center justify-between">
+        <div className="flex items-center space-x-1 ">
           <Image src="/Bitcoin.svg.png" alt="" width={32} height={32} />
           <p>{tokenSymbol}</p>
         </div>
         <InputNumber
           value={tokenAmount.toString()}
           onChange={handleInputChange}
-          className="p-2 w-full border rounded !border-transparent !bg-transparent [&_.ant-input-number-input]:text-right"
+          className="w-full rounded border !border-transparent !bg-transparent p-2 [&_.ant-input-number-input]:text-right"
           inputMode="numeric"
           controls={false}
           variant="borderless"
