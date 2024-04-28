@@ -6,7 +6,10 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "lint-staged": "lint-staged",
+    "prepare": "husky",
+    "postinstall": "npx husky init && echo npx lint-staged > .husky/pre-commit"
   },
   "dependencies": {
     "@ant-design/cssinjs": "^1.20.0",
