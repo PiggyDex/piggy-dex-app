@@ -19,9 +19,20 @@
       "jsx": true
     }
   },
-  "plugins": ["prettier", "import", "@typescript-eslint", "sort-export-all"],
+  "overrides": [
+    {
+      "files": ["*.ts", "*.tsx", "*.js", "*.jsx"],
+      "parser": "@typescript-eslint/parser"
+    }
+  ],
+  "plugins": ["prettier", "import", "@typescript-eslint", "sort-export-all", "tailwindcss", "react"],
   "rules": {
-    "prettier/prettier": "error",
+    "prettier/prettier": [
+      "error",
+      {
+        "endOfLine": "auto"
+      }
+    ],
     "react/jsx-no-target-blank": "warn",
     "react/jsx-boolean-value": "error",
     "react-hooks/exhaustive-deps": "error",
@@ -93,12 +104,20 @@
         "next": "multiline-block-like"
       }
     ],
+    
     "@typescript-eslint/consistent-type-imports": "error",
     "@typescript-eslint/no-unused-vars": "error",
     "@typescript-eslint/no-unnecessary-condition": "error",
     "@typescript-eslint/await-thenable": "error",
     "@typescript-eslint/no-unnecessary-type-assertion": "error",
     "@typescript-eslint/no-inferrable-types": "error",
-    "sort-export-all/sort-export-all": "error"
+    "sort-export-all/sort-export-all": "error",
+    "tailwindcss/classnames-order": "error",
+    "tailwindcss/no-unnecessary-arbitrary-value": "error"
+  },
+  "settings": {
+    "react": {
+      "version": "detect"
+    }
   }
 }
