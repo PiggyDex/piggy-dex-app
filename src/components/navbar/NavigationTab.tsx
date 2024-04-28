@@ -16,12 +16,12 @@ export const NavigationTab: FC<NavigationTabProps> = (
   },
 ) => {
   return (
-    <div className="py-3 px-4 flex">
+    <div className="flex px-4 py-3">
       <Image src={"/icons/angle-right.svg"} alt="" width={24} height={24} />
       <div className="px-2">
         <Image src={props.svgSource} alt="" width={24} height={24} />
       </div>
-      <span className="text-[#EFEFEF] text-base">{props.text}</span>
+      <span className="text-base text-[#EFEFEF]">{props.text}</span>
     </div>
   );
 };
