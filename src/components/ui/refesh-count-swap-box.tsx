@@ -13,7 +13,7 @@ export const RefeshCountSwapBox: FC<RefeshCountSwapBoxProps> = ({
 
   return (
     <div className="flex items-center justify-center">
-      <svg viewBox="0 0 288 288" className="transform -rotate-90 w-7 h-7">
+      <svg viewBox="0 0 288 288" className="h-7 w-7 -rotate-90 transform">
         <circle
           cx="145"
           cy="145"

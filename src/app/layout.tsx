@@ -2,8 +2,6 @@ import { AntdRegistry } from "@ant-design/nextjs-registry";
 import { type Metadata } from "next";
 import localFont from "next/font/local";
 
-import "./globals.css";
-
 const BDOGrotesk = localFont({
   src: [
     {
@@ -23,6 +21,8 @@ export const metadata: Metadata = {
   title: "Piggy DEX App",
   description: "Best DEX on Conflux Network",
 };
+
+// const queryClient = new QueryClient();
 
 export default function RootLayout({
   children,
