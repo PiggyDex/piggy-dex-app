@@ -2,6 +2,8 @@ import { AntdRegistry } from "@ant-design/nextjs-registry";
 import { type Metadata } from "next";
 import localFont from "next/font/local";
 
+import "./globals.css";
+
 const BDOGrotesk = localFont({
   src: [
     {
