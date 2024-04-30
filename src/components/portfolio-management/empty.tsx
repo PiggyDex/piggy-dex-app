@@ -3,9 +3,9 @@ import { type FC } from "react";
 
 export const Empty: FC = () => {
   return (
-    <div className="flex flex-col rounded-[15px] bg-white text-black py-8 gap-8 items-center self-stretch">
+    <div className="flex flex-col items-center gap-8 self-stretch rounded-[15px] bg-white py-8 text-black">
       <Image src="/profit.svg" alt="profit" width={218} height={210} />
-      <span className="text-[16px] leading-[19.2px] font-normal">
+      <span className="text-[16px] font-normal leading-[19.2px]">
         You do not have any liquidity yet, create one now!
       </span>
       <Image
