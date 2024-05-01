@@ -8,6 +8,9 @@ dependencies:
   '@ant-design/cssinjs':
     specifier: ^1.20.0
     version: 1.20.0(react-dom@18.3.1)(react@18.3.1)
+  '@ant-design/icons':
+    specifier: ^5.3.6
+    version: 5.3.6(react-dom@18.3.1)(react@18.3.1)
   '@ant-design/nextjs-registry':
     specifier: ^1.0.0
     version: 1.0.0(@ant-design/cssinjs@1.20.0)(antd@5.16.5)(next@14.2.1)(react-dom@18.3.1)(react@18.3.1)
