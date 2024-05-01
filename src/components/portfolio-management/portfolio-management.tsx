@@ -3,7 +3,8 @@ import Image from "next/image";
 // import Image from "next/image";
 import { type FC } from "react";
 
-import { Empty } from "./empty";
+import { AddLiquidty } from "./add-liquidity";
+// import { Empty } from "./empty";
 
 export const PortfolioManagement: FC = () => {
   return (
@@ -31,7 +32,8 @@ export const PortfolioManagement: FC = () => {
           </div>
         </Button>
       </div>
-      <Empty />
+      {/* <Empty /> */}
+      <AddLiquidty />
     </div>
   );
 };
