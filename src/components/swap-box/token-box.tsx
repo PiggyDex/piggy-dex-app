@@ -37,7 +37,9 @@ export const TokenBox: FC<TokenBoxProps> = ({
           stringMode
         />
       </div>
-      <div>Balance: {accountBalance}</div>
+      <div className="text-[16px] font-[400] leading-[19.2px] text-[#5C5C5C]">
+        Balance: {accountBalance}
+      </div>
     </div>
   );
 };
