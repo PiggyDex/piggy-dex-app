@@ -1,7 +1,7 @@
 import Image from "next/image";
 import { type FC } from "react";
 
-import { CustomConnectButton } from "../connect-button/index";
+import { CustomConnectButton } from "@/components";
 
 export const Empty: FC = () => {
   return (
