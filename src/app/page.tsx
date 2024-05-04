@@ -1,8 +1,32 @@
+"use client";
+
+import { StyleProvider } from "@ant-design/cssinjs";
+import NiceModal, { useModal } from "@ebay/nice-modal-react";
+import { Button } from "antd";
+
+import { SelectTokenModal } from "@/components";
+
 export default function Home() {
+  const modal = useModal(SelectTokenModal);
+
   return (
-    <main className="flex flex-col items-center justify-between overflow-x-hidden">
-      {/* Content Layout Here */}
-      Pseudo Content
-    </main>
+    <StyleProvider hashPriority="high">
+      <NiceModal.Provider>
+        <main className="flex flex-col items-center justify-between overflow-x-hidden">
+          <Button
+            type="primary"
+            onClick={() =>
+              modal.show({
+                maxSelect: 2,
+                // closeAfterSelecting: true,
+                onlyShowAllTokens: false,
+              })
+            }
+          >
+            Show Modal
+          </Button>
+        </main>
+      </NiceModal.Provider>
+    </StyleProvider>
   );
 }

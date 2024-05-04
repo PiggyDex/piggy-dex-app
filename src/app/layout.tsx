@@ -36,7 +36,7 @@ export default function RootLayout({
       <head>
         <link rel="icon" href="/favicon.ico" />
       </head>
-      <body className={BDOGrotesk.className}>
+      <body id="app" className={BDOGrotesk.className}>
         <AntdRegistry>{children}</AntdRegistry>
       </body>
     </html>
