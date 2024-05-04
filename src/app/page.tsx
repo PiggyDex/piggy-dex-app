@@ -1,10 +1,36 @@
-import { PortfolioManagement } from "@/components";
+"use client";
+
+import { StyleProvider } from "@ant-design/cssinjs";
+import NiceModal, { useModal } from "@ebay/nice-modal-react";
+import { ConnectButton } from "@rainbow-me/rainbowkit";
+import { Button } from "antd";
+
+import { PortfolioManagement, SelectTokenModal, SwapBox } from "@/components";
 
 export default function Home() {
+  const modal = useModal(SelectTokenModal);
+
   return (
-    <main className="flex flex-col items-center justify-between overflow-x-hidden bg-[#FBF1F3]">
-      {/* <SwapBox /> */}
-      <PortfolioManagement />
-    </main>
+    <StyleProvider hashPriority="high">
+      <NiceModal.Provider>
+        <main className="flex flex-col items-center justify-between overflow-x-hidden bg-[#FBF1F3]">
+          <Button
+            type="primary"
+            onClick={() =>
+              modal.show({
+                maxSelect: 2,
+                // closeAfterSelecting: true,
+                onlyShowAllTokens: false,
+              })
+            }
+          >
+            Show Modal
+          </Button>
+          <ConnectButton />
+          <SwapBox />
+          <PortfolioManagement />
+        </main>
+      </NiceModal.Provider>
+    </StyleProvider>
   );
 }
