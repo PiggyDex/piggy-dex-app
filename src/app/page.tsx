@@ -1,19 +1,12 @@
 import { ConnectButton } from "@rainbow-me/rainbowkit";
 
+import { SwapBox } from "@/components";
+
 export default function Home() {
   return (
     <main className="flex flex-col items-center justify-between overflow-x-hidden">
-      <div
-        style={{
-          display: "flex",
-          justifyContent: "flex-end",
-          padding: 12,
-        }}
-      >
-        <div>
-          <ConnectButton />
-        </div>
-      </div>
+      <SwapBox />
+      <ConnectButton />
     </main>
   );
 }
