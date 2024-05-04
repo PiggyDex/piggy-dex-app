@@ -100,7 +100,7 @@ export const SwapBox: FC = () => {
           <button
             title="Swap Tokens"
             type="button"
-            className="m-12 flex"
+            className="m-12 flex items-center justify-center hover:cursor-pointer"
             onClick={() => {
               // swap token symbols
               const temp = tokenSymbolA;
