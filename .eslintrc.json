@@ -71,14 +71,15 @@
       "error",
       {
         "patterns": [
-          "!@/assets/**",
           "@/atoms/**",
           "@/components/**",
           "@/constants/**",
+          "@/context/**",
           "@/hooks/**",
-          "@/types/**",
           "@/lib/**",
-          "@/pages/**"
+          "@/types/**",
+          "!@/assets/**",
+          "../**"
         ]
       }
     ],
