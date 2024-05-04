@@ -1,6 +1,8 @@
-import { AntdRegistry } from "@ant-design/nextjs-registry";
+import "@rainbow-me/rainbowkit/styles.css";
 import { type Metadata } from "next";
 import localFont from "next/font/local";
+
+import { ContextProvider } from "@/context";
 
 import "./globals.css";
 
@@ -37,7 +39,7 @@ export default function RootLayout({
         <link rel="icon" href="/favicon.ico" />
       </head>
       <body id="app" className={BDOGrotesk.className}>
-        <AntdRegistry>{children}</AntdRegistry>
+        <ContextProvider>{children}</ContextProvider>
       </body>
     </html>
   );

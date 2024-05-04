@@ -2,9 +2,10 @@
 
 import { StyleProvider } from "@ant-design/cssinjs";
 import NiceModal, { useModal } from "@ebay/nice-modal-react";
+import { ConnectButton } from "@rainbow-me/rainbowkit";
 import { Button } from "antd";
 
-import { SelectTokenModal } from "@/components";
+import { SelectTokenModal, SwapBox } from "@/components";
 
 export default function Home() {
   const modal = useModal(SelectTokenModal);
@@ -25,6 +26,8 @@ export default function Home() {
           >
             Show Modal
           </Button>
+          <ConnectButton />
+          <SwapBox />
         </main>
       </NiceModal.Provider>
     </StyleProvider>
