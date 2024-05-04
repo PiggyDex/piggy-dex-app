@@ -5,7 +5,7 @@ import NiceModal, { useModal } from "@ebay/nice-modal-react";
 import { ConnectButton } from "@rainbow-me/rainbowkit";
 import { Button } from "antd";
 
-import { SelectTokenModal, SwapBox } from "@/components";
+import { PortfolioManagement, SelectTokenModal, SwapBox } from "@/components";
 
 export default function Home() {
   const modal = useModal(SelectTokenModal);
@@ -13,7 +13,7 @@ export default function Home() {
   return (
     <StyleProvider hashPriority="high">
       <NiceModal.Provider>
-        <main className="flex flex-col items-center justify-between overflow-x-hidden">
+        <main className="flex flex-col items-center justify-between overflow-x-hidden bg-[#FBF1F3]">
           <Button
             type="primary"
             onClick={() =>
@@ -28,6 +28,7 @@ export default function Home() {
           </Button>
           <ConnectButton />
           <SwapBox />
+          <PortfolioManagement />
         </main>
       </NiceModal.Provider>
     </StyleProvider>
