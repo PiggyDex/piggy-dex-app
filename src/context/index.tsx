@@ -7,7 +7,7 @@ import type React from "react";
 import { WagmiProvider } from "wagmi";
 import { confluxESpace } from "wagmi/chains";
 
-import config from "../../wagmi.config";
+import config from "@/wagmi.config";
 
 // Setup queryClient
 const queryClient = new QueryClient();
