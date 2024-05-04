@@ -16,11 +16,13 @@ export const TokenBox: FC<TokenBoxProps> = ({
   handleInputChange,
 }) => {
   return (
-    <div className="flex-col space-y-3 rounded-lg border bg-[#FBF1F3] px-6 py-4">
-      <div className="direction-rtl flex w-full items-center justify-between">
+    <div className="flex-col items-start gap-3 self-stretch rounded-[10px] border border-solid border-[#E1A1B1] bg-[#FBF1F3] px-6 py-[16px]">
+      <div className="flex w-full items-center self-stretch">
         <div className="flex items-center space-x-1 ">
           <Image src="/Bitcoin.svg.png" alt="" width={32} height={32} />
-          <p>{tokenSymbol}</p>
+          <p className="text-[16px] font-[400] leading-[19.2px] text-[#5C5C5C]">
+            {tokenSymbol}
+          </p>
         </div>
         <InputNumber
           value={tokenAmount.toString()}
@@ -35,7 +37,9 @@ export const TokenBox: FC<TokenBoxProps> = ({
           stringMode
         />
       </div>
-      <div>Balance: {accountBalance}</div>
+      <div className="text-[16px] font-[400] leading-[19.2px] text-[#5C5C5C]">
+        Balance: {accountBalance}
+      </div>
     </div>
   );
 };
