@@ -1,3 +1,5 @@
+"use client";
+
 import { StyleProvider } from "@ant-design/cssinjs";
 import NiceModal, { useModal } from "@ebay/nice-modal-react";
 import { ConnectButton } from "@rainbow-me/rainbowkit";
