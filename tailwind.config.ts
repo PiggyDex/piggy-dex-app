@@ -11,7 +11,7 @@ const config: Config = {
   },
   important: '#app',
   prefix: "",
-  important: "body",
+  // important: "body",
   theme: {
     container: {
       center: true,

@@ -57,7 +57,7 @@ export const SwapBox: FC = () => {
 
   return (
     <div className="container px-16">
-      <div className="divide-y-1 w-full space-y-4 divide-solid divide-pink-400/25 rounded-lg bg-white p-6 text-black shadow-md">
+      <div className="divide-y-1 w-full space-y-4 divide-pink-400/25 rounded-lg bg-white p-6 text-black shadow-md">
         <div className="flex justify-between space-x-8">
           <div className="text-xl font-normal">Swap</div>
           <div className="flex space-x-4">
