@@ -1,7 +1,15 @@
+import { useModal } from "@ebay/nice-modal-react";
+import { type InputNumberProps } from "antd";
 import Image from "next/image";
-import { type FC } from "react";
+import { type FC, useState } from "react";
 
-import { TokenBox } from "@/components";
+import {
+  SelectTokenModal,
+  TokenBox,
+  type TokenBoxProps,
+  type TokenListProps,
+  tokenList,
+} from "@/components";
 
 type ItemProps = {
   name: string;
@@ -26,7 +34,13 @@ const Item: FC<ItemProps> = ({ name, value }) => {
   );
 };
 
-export const Supply: FC = () => {
+export const Supply: FC<TokenBoxProps> = ({
+  tokens,
+  tokensAmount,
+  accountBalances,
+  handleInputChange,
+  showModal,
+}) => {
   return (
     <div className="flex flex-col items-center gap-8 self-stretch rounded-[15px] bg-white px-6 py-8">
       <div className="flex items-start justify-center gap-8 self-stretch">
@@ -34,8 +48,20 @@ export const Supply: FC = () => {
           <span className="w-full self-stretch text-[16px] font-[700] leading-[19.2px] text-[#414141]">
             Token pair
           </span>
-          <TokenBox tokenSymbol="ABC" tokenAmount={0} accountBalance={0} />
-          <TokenBox tokenSymbol="XYZ" tokenAmount={0} accountBalance={0} />
+          <TokenBox
+            tokens={[tokens[0]]}
+            tokensAmount={[tokensAmount[0].toString()]}
+            accountBalances={[accountBalances[0]]}
+            handleInputChange={[handleInputChange[0]]}
+            showModal={[showModal[0]]}
+          />
+          <TokenBox
+            tokens={[tokens[1]]}
+            tokensAmount={[tokensAmount[1].toString()]}
+            accountBalances={[accountBalances[1]]}
+            handleInputChange={[handleInputChange[1]]}
+            showModal={[showModal[1]]}
+          />
         </div>
         <div className="flex w-full flex-col items-start gap-8">
           <span className="w-full self-stretch text-[16px] font-[700] leading-[19.2px] text-[#414141]">
@@ -104,6 +130,42 @@ export const ChoosePair: FC = () => {
 };
 
 export const AddLiquidty: FC = () => {
+  const modal = useModal(SelectTokenModal);
+
+  const showModalA = () => {
+    modal.show({
+      usingTokens: usingTokenA,
+      setUsingTokens: setUsingTokenA,
+      title: "Select Token",
+      maxSelect: 1,
+      onlyShowAllTokens: false,
+    });
+  };
+
+  const showModalB = () => {
+    modal.show({
+      usingTokens: usingTokenB,
+      setUsingTokens: setUsingTokenB,
+      title: "Select Token",
+      maxSelect: 1,
+      onlyShowAllTokens: false,
+    });
+  };
+
+  const [tokenAmountA, setTokenAmountA] = useState<string>("1");
+  // 0 is token A
+  // 1 is token B
+  const [usingTokenA, setUsingTokenA] = useState<TokenListProps[]>([
+    tokenList[0],
+  ]);
+  const [usingTokenB, setUsingTokenB] = useState<TokenListProps[]>([
+    tokenList[1],
+  ]);
+
+  const handleTokenAmountChange: InputNumberProps["onChange"] = (value) => {
+    setTokenAmountA(parseFloat(value as string).toString());
+  };
+
   return (
     <div className="flex flex-col gap-6">
       <div className="flex items-center gap-2 self-stretch">
@@ -123,7 +185,13 @@ export const AddLiquidty: FC = () => {
           Add liquidity
         </span>
       </div>
-      <Supply />
+      <Supply
+        tokens={[usingTokenA[0], usingTokenB[0]]}
+        tokensAmount={[tokenAmountA, "100"]}
+        accountBalances={[100, 100]}
+        handleInputChange={[handleTokenAmountChange, () => {}]}
+        showModal={[showModalA, showModalB]}
+      />
     </div>
   );
 };

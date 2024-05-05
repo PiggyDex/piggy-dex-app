@@ -1,4 +1,6 @@
 "use client";
+import { Button } from "antd";
+import clsx from "clsx";
 import { type FC } from "react";
 
 type PercentageButtonProps = {
@@ -13,11 +15,17 @@ export const PercentageButton: FC<PercentageButtonProps> = ({
   onClick,
 }) => {
   return (
-    <button
-      className={`bg-white hover:border-[#E1A1B1] ${isActive ? "border-[#E1A1B1] text-[#E1A1B1]" : ""} box-border rounded-lg border px-2 hover:text-[#E1A1B1]`}
+    <Button
+      className={clsx(
+        "flex items-center justify-center rounded-[10px] border border-solid px-2 py-1 text-[16px] font-[400] leading-[19.2px] text-[#929292] ",
+        {
+          "text-[#E1A1B1] border-[#E1A1B1]": isActive,
+          "text-[#929292]  border-[#CCC]": !isActive,
+        },
+      )}
       onClick={onClick}
     >
       {percentageValue}%
-    </button>
+    </Button>
   );
 };
