@@ -47,7 +47,7 @@ const nextConfig = {
 
 		return config;
 	},
-	// transpilePackages: ["antd"],
+	transpilePackages: ["antd"],
 };
 
 export default nextConfig;
