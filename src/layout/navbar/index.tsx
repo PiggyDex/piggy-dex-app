@@ -1,11 +1,12 @@
 "use client";
 
-import { Button, Menu } from "antd";
+import { Menu } from "antd";
 import { useAtom } from "jotai";
 import Image from "next/image";
 import { usePathname, useRouter } from "next/navigation";
 import { type FC, useEffect } from "react";
 
+import ArrowHeadIcon from "@/assets/arrow-head-right-pink.svg";
 import LogoutIcon from "@/assets/logout.svg";
 import SettingsIcon from "@/assets/settings.svg";
 import { BorderClassNameAtom, NavbarCollapsedAtom } from "@/atoms";
@@ -64,15 +65,25 @@ export const Navbar: FC = () => {
         border,
       )}
     >
-      <Button
-        type="primary"
-        onClick={toggleCollapsed}
-        className="absolute mb-4 translate-x-96"
-      >
-        {collapsed ? "Expand" : "Collapse"}
-      </Button>
       <div className="flex flex-col items-center gap-5 border-0 border-b border-solid border-neutral-700">
         <div className="flex w-full flex-col items-center justify-center border-0 border-b border-solid border-neutral-700 p-4">
+          <div
+            onClick={toggleCollapsed}
+            className="absolute -right-5 flex items-center justify-center bg-transparent p-3 hover:cursor-pointer"
+          >
+            <button
+              type="button"
+              title="Dock Button"
+              className=" flex items-center justify-center rounded-full border-none bg-navbar p-1 hover:cursor-pointer"
+            >
+              <ArrowHeadIcon
+                className={cn(
+                  "transition-all duration-500 w-4 h-4",
+                  !collapsed ? "rotate-180 translate-x-[2px]" : "translate-x-1",
+                )}
+              />
+            </button>
+          </div>
           <Image
             className="flex-none"
             src={collapsed ? "/logo.svg" : "/logo-w-text.svg"}
