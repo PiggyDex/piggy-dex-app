@@ -85,17 +85,19 @@ export const Navbar: FC = () => {
             </button>
           </div>
           <Image
-            className="flex-none"
+            className="flex-none transition-all duration-300 will-change-transform hover:cursor-pointer"
             src={collapsed ? "/logo.svg" : "/logo-w-text.svg"}
             alt="logo"
             width={collapsed ? 32 : 162}
             height={32}
+            onClick={() => router.push(PATH.HOME)}
           />
         </div>
         <span
           className={cn(
-            "ml-4 self-start text-base font-normal not-italic leading-[120%] text-neutral-50",
-            collapsed && "opacity-0 w-0 !h-0 transition-all duration-500",
+            "will-change-transform ml-4 self-start text-base font-normal not-italic leading-[120%] text-neutral-50",
+            collapsed && "animate-collapsing-title w-0",
+            !collapsed && "animate-expanding-title",
           )}
         >
           Services
@@ -117,11 +119,15 @@ export const Navbar: FC = () => {
         />
       </div>
       <div className="flex w-full flex-col items-start justify-start gap-5 px-4">
-        {!collapsed && (
-          <span className="text-base font-normal not-italic leading-[120%] text-neutral-50">
-            Account
-          </span>
-        )}
+        <span
+          className={cn(
+            "will-change-transform text-base font-normal not-italic leading-[120%] text-neutral-50 !h-full",
+            collapsed && "animate-collapsing-title w-0",
+            !collapsed && "animate-expanding-title",
+          )}
+        >
+          Account
+        </span>
         <div className="flex w-full flex-col items-start">
           <div
             className={cn(
