@@ -12,7 +12,7 @@ export const RefeshCountSwapBox: FC<RefeshCountSwapBoxProps> = ({
   const circumference = 2 * Math.PI * 800;
 
   return (
-    <div className="flex items-center justify-center">
+    <div className="flex flex-col items-center justify-center gap-[10px] px-[10px] py-[6px]">
       <svg viewBox="0 0 288 288" className="h-7 w-7 -rotate-90 transform">
         <circle
           cx="145"
@@ -38,7 +38,7 @@ export const RefeshCountSwapBox: FC<RefeshCountSwapBoxProps> = ({
           style={{ transition: "stroke-dashoffset 0.35s ease 0s" }}
         />
       </svg>
-      <span className="absolute text-base">{`${currentCount}`}</span>
+      <div className="absolute text-base text-[#D2738B]">{`${currentCount}`}</div>
     </div>
   );
 };

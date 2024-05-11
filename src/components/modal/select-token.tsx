@@ -30,19 +30,25 @@ const TabName: FC<TabNameProps> = ({ name }) => {
 
 export const SelectTokenModal = NiceModal.create(
   ({
+    usingTokens,
+    setUsingTokens,
+    title,
     maxSelect,
     // closeAfterSelecting,
     onlyShowAllTokens,
   }: {
+    usingTokens: TokenListProps[];
+    setUsingTokens: (newUsingTokens: TokenListProps[]) => void;
+    title: string;
     maxSelect: number;
     // closeAfterSelecting: boolean;
     onlyShowAllTokens: boolean;
   }) => {
     const modal = useModal();
-    const [usingTokens, setUsingTokens] = useState<TokenListProps[]>([]);
 
     const [displayTokenList, setDisplayTokenList] =
       useState<TokenListProps[]>(tokenList);
+    const [chosenTokens, setChosenTokens] = useState<TokenListProps[]>([]);
 
     const items: TabsProps["items"] = [
       {
@@ -52,8 +58,8 @@ export const SelectTokenModal = NiceModal.create(
           <ShowTokenList
             maxSelect={maxSelect}
             tokenList={displayTokenList}
-            usingTokens={usingTokens}
-            setUsingTokens={setUsingTokens}
+            usingTokens={chosenTokens}
+            setUsingTokens={setChosenTokens}
             updateTokenList={setDisplayTokenList}
           />
         ),
@@ -65,8 +71,8 @@ export const SelectTokenModal = NiceModal.create(
           <ShowTokenList
             maxSelect={maxSelect}
             tokenList={displayTokenList}
-            usingTokens={usingTokens}
-            setUsingTokens={setUsingTokens}
+            usingTokens={chosenTokens}
+            setUsingTokens={setChosenTokens}
             updateTokenList={setDisplayTokenList}
           />
         ),
@@ -105,10 +111,14 @@ export const SelectTokenModal = NiceModal.create(
         footer={
           <Button
             type="primary"
-            disabled={usingTokens.length !== maxSelect}
+            disabled={chosenTokens.length !== maxSelect}
             className="flex h-auto w-full items-center justify-center self-stretch rounded-[10px] bg-[#E1A1B1] px-6 py-[10px] text-[16px] font-[700] leading-[19.2px] text-[#58303A] disabled:bg-[#FBF1F3] disabled:text-[#F1D4DB]"
+            onClick={() => {
+              modal.hide();
+              setUsingTokens(chosenTokens);
+            }}
           >
-            Add Liquidity
+            {title}
           </Button>
         }
         closable={false}
@@ -159,9 +169,9 @@ export const SelectTokenModal = NiceModal.create(
             updateTokenList={setDisplayTokenList}
           />
         )}
-        {usingTokens.length > 0 && (
+        {chosenTokens.length > 0 && (
           <div className="flex items-start gap-2 self-stretch">
-            {usingTokens.map((token, index) => {
+            {chosenTokens.map((token, index) => {
               return (
                 <div
                   key={index}
@@ -183,7 +193,7 @@ export const SelectTokenModal = NiceModal.create(
                     height={12}
                     className="flex items-start rounded bg-[#FFEAEA] p-[2px] hover:cursor-pointer"
                     onClick={() => {
-                      setUsingTokens(usingTokens.filter((t) => t !== token));
+                      setChosenTokens(chosenTokens.filter((t) => t !== token));
                     }}
                   />
                 </div>

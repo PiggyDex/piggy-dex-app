@@ -23,6 +23,41 @@ const config: Config = {
       },
     },
     extend: {
+      keyframes: {
+        "collapsing-title": {
+          "0%": {
+            opacity: "0",
+          },
+          "20%": {
+            height: "80%",
+            opacity: "0",
+          },
+          "100%": {
+            height: "0",
+            opacity: "0",
+          },
+        },
+        "expanding-title": {
+          "0%": {
+            opacity: "0",
+          },
+          "33%": {
+            height: "10%",
+            opacity: "0",
+          },
+          "50%": {
+            height: "50%",
+          },
+          "100%": {
+            height: "100%",
+            opacity: "1",
+          },
+        },
+      },
+      animation: {
+        "collapsing-title": "collapsing-title 0.5s ease-in-out forwards",
+        "expanding-title": "expanding-title 0.750s ease-in-out forwards",
+      },
       colors: {
         border: "hsl(var(--border))",
         textLight: "hsl(var(--text-light))",
