@@ -92,11 +92,14 @@ export const Navbar: FC = () => {
             height={32}
           />
         </div>
-        {!collapsed && (
-          <span className="ml-4 self-start text-base font-normal not-italic leading-[120%] text-neutral-50">
-            Services
-          </span>
-        )}
+        <span
+          className={cn(
+            "ml-4 self-start text-base font-normal not-italic leading-[120%] text-neutral-50",
+            collapsed && "opacity-0 w-0 !h-0 transition-all duration-500",
+          )}
+        >
+          Services
+        </span>
         <Menu
           className={cn(
             "bg-navbar text-primary-50 mb-5 transition-all duration-300",

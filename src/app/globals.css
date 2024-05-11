@@ -125,3 +125,7 @@ color: #eabfca;
 .hidden-scroll-bar::-webkit-scrollbar {
   display: none;
 }
+
+.ant-menu-inline-collapsed-tooltip {
+  display: none !important;
+}
