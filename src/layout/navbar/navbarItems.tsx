@@ -1,7 +1,7 @@
 import { useAtom } from "jotai";
 import Image from "next/image";
 
-import { NavbarCollapsedAtom } from "@/atoms";
+import { navbarCollapsedAtom } from "@/atoms";
 import { PATH } from "@/constants";
 import { cn } from "@/lib";
 
@@ -10,7 +10,7 @@ type NavbarItemsProps = {
 };
 
 export const NavbarItems = ({ pathname }: NavbarItemsProps) => {
-  const [collapsed] = useAtom(NavbarCollapsedAtom);
+  const [collapsed] = useAtom(navbarCollapsedAtom);
 
   const MenuItemSpanClassName =
     "text-base not-italic font-normal leading-[120%] p-0";

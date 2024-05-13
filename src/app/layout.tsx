@@ -1,10 +1,9 @@
-import "@rainbow-me/rainbowkit/styles.css";
 import { type Metadata } from "next";
 import localFont from "next/font/local";
-
-import { ContextProvider } from "@/context";
+import type React from "react";
 
 import "./globals.css";
+import { Providers } from "./providers";
 
 const BDOGrotesk = localFont({
   src: [
@@ -26,8 +25,6 @@ export const metadata: Metadata = {
   description: "Best DEX on Conflux Network",
 };
 
-// const queryClient = new QueryClient();
-
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -39,7 +36,7 @@ export default function RootLayout({
         <link rel="icon" href="/favicon.ico" />
       </head>
       <body id="app" className={BDOGrotesk.className}>
-        <ContextProvider>{children}</ContextProvider>
+        <Providers>{children}</Providers>
       </body>
     </html>
   );

@@ -1,5 +1,5 @@
 import { atom } from "jotai";
 
-export const NavbarCollapsedAtom = atom<boolean>(false);
+export const navbarCollapsedAtom = atom<boolean>(false);
 
-export const BorderClassNameAtom = atom<string>("");
+export const borderClassNameAtom = atom<string>("");

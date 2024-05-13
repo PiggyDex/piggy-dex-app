@@ -9,15 +9,15 @@ import { type FC, useEffect } from "react";
 import ArrowHeadIcon from "@/assets/arrow-head-right-pink.svg";
 import LogoutIcon from "@/assets/logout.svg";
 import SettingsIcon from "@/assets/settings.svg";
-import { BorderClassNameAtom, NavbarCollapsedAtom } from "@/atoms";
+import { borderClassNameAtom, navbarCollapsedAtom } from "@/atoms";
 import { PATH } from "@/constants";
 import { cn } from "@/lib";
 
 import { NavbarItems } from "./navbarItems";
 
 export const Navbar: FC = () => {
-  const [collapsed, setCollapsed] = useAtom(NavbarCollapsedAtom);
-  const [border, setBorder] = useAtom(BorderClassNameAtom);
+  const [collapsed, setCollapsed] = useAtom(navbarCollapsedAtom);
+  const [border, setBorder] = useAtom(borderClassNameAtom);
   const router = useRouter();
 
   const pathname = usePathname();

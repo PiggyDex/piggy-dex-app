@@ -181,9 +181,9 @@ export const AddLiquidty: FC = () => {
           Add
         </span>
       </div>
-      <div className="flex gap-2">
-        <Image src="/arrow-left.svg" alt="arrow-left" width={14} height={11} />
-        <span className="text-[16px] font-[700] leading-[19.2px] text-black">
+      <div className="flex items-center  gap-2">
+        <Image src="/arrow-left.svg" alt="arrow-left" width={16} height={16} />
+        <span className="text-base font-[700] leading-[19.2px] text-black">
           Add liquidity
         </span>
       </div>

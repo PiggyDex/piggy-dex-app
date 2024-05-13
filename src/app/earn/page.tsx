@@ -1,10 +1,5 @@
-import { Navbar, PageLayout } from "@/layout";
+import { PageLayout } from "@/layout";
 
 export default function Earn() {
-  return (
-    <PageLayout>
-      <Navbar />
-      Earn
-    </PageLayout>
-  );
+  return <PageLayout>Earn</PageLayout>;
 }

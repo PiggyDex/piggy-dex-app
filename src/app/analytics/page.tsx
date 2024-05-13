@@ -1,10 +1,5 @@
-import { Navbar, PageLayout } from "@/layout";
+import { PageLayout } from "@/layout";
 
 export default function Analytics() {
-  return (
-    <PageLayout>
-      <Navbar />
-      Analytics
-    </PageLayout>
-  );
+  return <PageLayout>Analytics</PageLayout>;
 }

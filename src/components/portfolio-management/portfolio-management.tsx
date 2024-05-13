@@ -1,12 +1,23 @@
+"use client";
+
 import { Button } from "antd";
+import { useAtom } from "jotai";
 import Image from "next/image";
-// import Image from "next/image";
 import { type FC } from "react";
 
+import { portfolioPoolStateAtom } from "@/atoms";
+
 import { AddLiquidty } from "./add-liquidity";
-// import { Empty } from "./empty";
+import { Empty } from "./empty";
+
+const PoolStateMap = {
+  ["0"]: <Empty />,
+  [">0"]: <AddLiquidty />,
+};
 
 export const PortfolioManagement: FC = () => {
+  const [{ pools }] = useAtom(portfolioPoolStateAtom);
+
   return (
     <div className="flex w-full flex-col gap-6 px-8">
       <div className="flex w-full items-center justify-between self-stretch py-6">
@@ -32,8 +43,7 @@ export const PortfolioManagement: FC = () => {
           </div>
         </Button>
       </div>
-      {/* <Empty /> */}
-      <AddLiquidty />
+      {PoolStateMap[pools.length > 0 ? ">0" : "0"]}
     </div>
   );
 };

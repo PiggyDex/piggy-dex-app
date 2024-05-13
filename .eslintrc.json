@@ -74,7 +74,6 @@
           "@/atoms/**",
           "@/components/**",
           "@/constants/**",
-          "@/context/**",
           "@/hooks/**",
           "@/lib/**",
           "@/types/**",
