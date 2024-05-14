@@ -1,17 +1,20 @@
 "use client";
 
 import { useModal } from "@ebay/nice-modal-react";
-import { type InputNumberProps } from "antd";
+import { Button, type InputNumberProps } from "antd";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 import { type FC, useState } from "react";
 
 import {
+  type PortfolioManagementProps,
   SelectTokenModal,
   TokenBox,
   type TokenBoxProps,
   type TokenListProps,
   tokenList,
 } from "@/components";
+import { Page } from "@/constants";
 
 type ItemProps = {
   name: string;
@@ -54,14 +57,22 @@ export const Supply: FC<TokenBoxProps> = ({
             tokens={[tokens[0]]}
             tokensAmount={[tokensAmount[0].toString()]}
             accountBalances={[accountBalances[0]]}
-            handleInputChange={[handleInputChange[0]]}
+            handleInputChange={
+              handleInputChange && handleInputChange[0]
+                ? [handleInputChange[0]]
+                : undefined
+            }
             showModal={[showModal[0]]}
           />
           <TokenBox
             tokens={[tokens[1]]}
             tokensAmount={[tokensAmount[1].toString()]}
             accountBalances={[accountBalances[1]]}
-            handleInputChange={[handleInputChange[1]]}
+            handleInputChange={
+              handleInputChange && handleInputChange[1]
+                ? [handleInputChange[1]]
+                : undefined
+            }
             showModal={[showModal[1]]}
           />
         </div>
@@ -110,13 +121,35 @@ export const Supply: FC<TokenBoxProps> = ({
   );
 };
 
-export const ChoosePair: FC = () => {
+type ChoosePairProps = {
+  tokens: TokenListProps[];
+  setTokens: (tokens: TokenListProps[]) => void;
+};
+
+export const ChoosePair: FC<ChoosePairProps> = ({ tokens, setTokens }) => {
+  const modal = useModal(SelectTokenModal);
+
+  const showModal = () => {
+    modal.show({
+      usingTokens: tokens,
+      setUsingTokens: setTokens,
+      title: "Select Token",
+      maxSelect: 2,
+      onlyShowAllTokens: false,
+      showPageAfterSelect: Page.Supply,
+    });
+  };
+
   return (
     <div className="flex w-full flex-col gap-8 self-stretch rounded-[15px] bg-white px-6 py-8">
       <span className="text-[16px] leading-[19.2px] text-[#414141]">
         Choose a pair
       </span>
-      <button className="flex items-center justify-center gap-[10px] self-stretch rounded-[10px] bg-[#EFEFEF] px-6 py-[10px]">
+      <Button
+        className="flex h-auto items-center justify-center gap-[10px] self-stretch rounded-[10px] bg-[#EFEFEF] px-6 py-3"
+        type="primary"
+        onClick={showModal}
+      >
         <span className="text-[16px] font-[400] leading-[19.2px] text-[#414141]">
           Select 2 Tokens
         </span>
@@ -126,13 +159,18 @@ export const ChoosePair: FC = () => {
           width={24}
           height={24}
         />
-      </button>
+      </Button>
     </div>
   );
 };
 
-export const AddLiquidty: FC = () => {
+export const AddLiquidty: FC<PortfolioManagementProps> = ({
+  showPage,
+  tokenA,
+  tokenB,
+}) => {
   const modal = useModal(SelectTokenModal);
+  const router = useRouter();
 
   const showModalA = () => {
     modal.show({
@@ -155,17 +193,28 @@ export const AddLiquidty: FC = () => {
   };
 
   const [tokenAmountA, setTokenAmountA] = useState<string>("1");
+  const [tokenAmountB, setTokenAmountB] = useState<string>("1");
+
   // 0 is token A
   // 1 is token B
   const [usingTokenA, setUsingTokenA] = useState<TokenListProps[]>([
-    tokenList[0],
+    tokenA || tokenList[0],
   ]);
   const [usingTokenB, setUsingTokenB] = useState<TokenListProps[]>([
-    tokenList[1],
+    tokenB || tokenList[1],
   ]);
 
-  const handleTokenAmountChange: InputNumberProps["onChange"] = (value) => {
+  const [usingTokens, setUsingTokens] = useState<TokenListProps[]>([
+    usingTokenA[0],
+    usingTokenB[0],
+  ]);
+
+  const handleTokenAmountAChange: InputNumberProps["onChange"] = (value) => {
     setTokenAmountA(parseFloat(value as string).toString());
+  };
+
+  const handleTokenAmountBChange: InputNumberProps["onChange"] = (value) => {
+    setTokenAmountB(parseFloat(value as string).toString());
   };
 
   return (
@@ -180,20 +229,68 @@ export const AddLiquidty: FC = () => {
         <span className="text-[16px] font-[400] leading-[19.2px] text-[#955263] ">
           Add
         </span>
+        {(showPage && Page.Supply) > 0 && tokenA && tokenB && (
+          <>
+            <Image
+              src="/next-right.svg"
+              alt="next-right"
+              width={24}
+              height={24}
+            />
+            <span className="text-[16px] font-[400] leading-[19.2px] text-[#955263] ">
+              Supply
+            </span>
+          </>
+        )}
       </div>
       <div className="flex items-center  gap-2">
-        <Image src="/arrow-left.svg" alt="arrow-left" width={16} height={16} />
+        <Image
+          src="/arrow-left.svg"
+          alt="arrow-left"
+          width={16}
+          height={16}
+          onClick={() => {
+            router.push("/portfolio");
+          }}
+          className="hover:cursor-pointer"
+        />
         <span className="text-base font-[700] leading-[19.2px] text-black">
-          Add liquidity
+          Management
         </span>
+        {(showPage && Page.Supply) > 0 && tokenA && tokenB && (
+          <>
+            <Image
+              src="/arrow-left.svg"
+              alt="arrow-left"
+              width={16}
+              height={16}
+              onClick={() => {
+                router.push("/portfolio/add");
+              }}
+              className="hover:cursor-pointer"
+            />
+            <span className="text-base font-[700] leading-[19.2px] text-black">
+              Add liquidity
+            </span>
+          </>
+        )}
       </div>
-      <Supply
-        tokens={[usingTokenA[0], usingTokenB[0]]}
-        tokensAmount={[tokenAmountA, "100"]}
-        accountBalances={[100, 100]}
-        handleInputChange={[handleTokenAmountChange, () => {}]}
-        showModal={[showModalA, showModalB]}
-      />
+
+      {(showPage & Page.ChoosePair) > 0 && (
+        <ChoosePair tokens={usingTokens} setTokens={setUsingTokens} />
+      )}
+      {(showPage && Page.Supply) > 0 && tokenA && tokenB && (
+        <Supply
+          tokens={[usingTokenA[0], usingTokenB[0]]}
+          tokensAmount={[tokenAmountA, tokenAmountB]}
+          accountBalances={[100, 100]}
+          handleInputChange={[
+            handleTokenAmountAChange,
+            handleTokenAmountBChange,
+          ]}
+          showModal={[showModalA, showModalB]}
+        />
+      )}
     </div>
   );
 };

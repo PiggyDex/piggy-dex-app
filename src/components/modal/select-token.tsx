@@ -3,7 +3,10 @@
 import NiceModal, { useModal } from "@ebay/nice-modal-react";
 import { Button, Input, Modal, Tabs, type TabsProps } from "antd";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 import { type FC, useState } from "react";
+
+import { Page } from "@/constants";
 
 import { tokenList } from "./demo-token-list";
 import { ShowTokenList } from "./show-token-list";
@@ -36,6 +39,7 @@ export const SelectTokenModal = NiceModal.create(
     maxSelect,
     // closeAfterSelecting,
     onlyShowAllTokens,
+    showPageAfterSelect,
   }: {
     usingTokens: TokenListProps[];
     setUsingTokens: (newUsingTokens: TokenListProps[]) => void;
@@ -43,8 +47,10 @@ export const SelectTokenModal = NiceModal.create(
     maxSelect: number;
     // closeAfterSelecting: boolean;
     onlyShowAllTokens: boolean;
+    showPageAfterSelect?: number;
   }) => {
     const modal = useModal();
+    const router = useRouter();
 
     const [displayTokenList, setDisplayTokenList] =
       useState<TokenListProps[]>(tokenList);
@@ -116,6 +122,14 @@ export const SelectTokenModal = NiceModal.create(
             onClick={() => {
               modal.hide();
               setUsingTokens(chosenTokens);
+              if (
+                showPageAfterSelect &&
+                (showPageAfterSelect & Page.Supply) > 0
+              ) {
+                router.push(
+                  `/portfolio/add/supply?tokenA=${chosenTokens[0].address}&tokenB=${chosenTokens[1].address}`,
+                );
+              }
             }}
           >
             {title}
@@ -175,7 +189,7 @@ export const SelectTokenModal = NiceModal.create(
               return (
                 <div
                   key={index}
-                  className="flex items-center justify-center gap-1 rounded-[10px] border-DEFAULT border-solid border-[#929292] px-2 py-1"
+                  className="flex items-center justify-center gap-1 rounded-[10px] border border-solid border-[#929292] px-2 py-1"
                 >
                   <Image
                     src="/ethereum-eth.svg"

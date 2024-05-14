@@ -8,7 +8,7 @@ export type TokenBoxProps = {
   tokens: TokenListProps[];
   tokensAmount: string[] | number[];
   accountBalances: number[];
-  handleInputChange: InputNumberProps["onChange"][];
+  handleInputChange?: InputNumberProps["onChange"][];
   showModal: (() => void)[];
 };
 
@@ -38,7 +38,7 @@ export const TokenBox: FC<TokenBoxProps> = ({
         </div>
         <InputNumber
           value={tokensAmount[0].toString()}
-          onChange={handleInputChange[0]}
+          onChange={handleInputChange ? handleInputChange[0] : undefined}
           className="w-auto flex-[1_1_0%] items-end justify-center rounded border !border-transparent !bg-transparent p-2 text-[16px] font-[400] leading-[19.2px] text-[#5C5C5C] [&_.ant-input-number-input]:text-right"
           inputMode="numeric"
           controls={false}

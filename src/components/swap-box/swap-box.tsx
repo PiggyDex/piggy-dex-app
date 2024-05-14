@@ -193,7 +193,7 @@ export const SwapBox: FC = () => {
               tokens={usingTokenB}
               tokensAmount={[100]}
               accountBalances={[100]}
-              handleInputChange={[handleTokenAmountChange]}
+              // handleInputChange={[handleTokenAmountChange]}
               showModal={[showModalB]}
             />
           </div>
