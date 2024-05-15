@@ -2,7 +2,6 @@ import { redirect } from "next/navigation";
 
 import { PortfolioManagement, tokenList } from "@/components";
 import { Page } from "@/constants";
-import { PageLayout } from "@/layout";
 
 export default function Portfolio({
   // params,
@@ -30,12 +29,10 @@ export default function Portfolio({
   }
 
   return (
-    <PageLayout>
-      <PortfolioManagement
-        showPage={Page.AddLiquidity}
-        tokenA={_tokenA}
-        tokenB={_tokenB}
-      />
-    </PageLayout>
+    <PortfolioManagement
+      showPage={Page.AddLiquidity}
+      tokenA={_tokenA}
+      tokenB={_tokenB}
+    />
   );
 }
