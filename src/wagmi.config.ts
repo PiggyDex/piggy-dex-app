@@ -2,7 +2,7 @@ import { getDefaultConfig } from "@rainbow-me/rainbowkit";
 import { confluxESpace, confluxESpaceTestnet } from "wagmi/chains";
 
 export const projectId =
-  process.env.WALLET_CONNECT_PROJECT_ID || "get_project_id";
+  process.env.NEXT_PUBLIC_WALLET_CONNECT_PROJECT_ID || "get_project_id";
 
 const config = getDefaultConfig({
   appName: "piggy-dex-app",

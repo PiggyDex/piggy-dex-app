@@ -5,7 +5,7 @@
 @tailwind utilities;
 
 .test {
-  color: #ffbdd74d;
+color: #eabfca;
 }
 
 :root {
@@ -14,18 +14,86 @@
 
   --primary: 338 73% 81%;
   --primary-foreground: 338 19% 34%;
+  --primary-50: 251 241 243;
+  --primary-100: 241 212 219;
+  --primary-200: 234 191 202;
+  --primary-300: 225 161 177;
+  --primary-400: 219 143 162;
+  --primary-500: 210 115 139;
+  --primary-600: 191 105 126;
+  --primary-700: 149 82 99;
+  --primary-800: 116 63 76;
+  --primary-900: 88 48 58;
+
+  --success: 152 214 103;
+  --success-50: 242 250 236;
+  --success-100: 215 239 196;
+  --success-200: 196 232 168;
+  --success-300: 169 221 128;
+  --success-400: 152 214 103;
+  --success-500: 126 204 65;
+  --success-600: 115 186 59;
+  --success-700: 89 145 46;
+  --success-800: 69 112 36;
+  --success-900: 53 86 27;
+
+  --info: 97 201 253;
+  --info-50: 235 248 255;
+  --info-100: 194 234 254;
+  --info-200: 164 224 254;
+  --info-300: 123 209 253;
+  --info-400: 97 201 253;
+  --info-500: 58 187 252;
+  --info-600: 53 170 229;
+  --info-700: 41 133 179;
+  --info-800: 32 103 139;
+  --info-900: 24 79 106;
+
+  --warning: 255 237 104;
+  --warning-50: 255 253 236;
+  --warning-100: 255 248 196;
+  --warning-200: 255 244 168;
+  --warning-300: 255 240 128;
+  --warning-400: 255 237 104;
+  --warning-500: 255 232 66;
+  --warning-600: 232 211 60;
+  --warning-700: 181 165 47;
+  --warning-800: 140 128 36;
+  --warning-900: 107 97 28;
+
+  --error: 255 88 90;
+  --error-50: 255 234 234;
+  --error-100: 255 190 191;
+  --error-200: 255 159 160;
+  --error-300: 255 115 117;
+  --error-400: 255 88 90;
+  --error-500: 255 46 49;
+  --error-600: 232 42 45;
+  --error-700: 181 33 35;
+  --error-800: 140 25 27;
+  --error-900: 107 19 21;
+
+  --neutral: 125 125 125;
+  --neutral-50: 239 239 239;
+  --neutral-100: 204 204 204;
+  --neutral-200: 180 180 180;
+  --neutral-300: 146 146 146;
+  --neutral-400: 125 125 125;
+  --neutral-500: 92 92 92;
+  --neutral-600: 84 84 84;
+  --neutral-700: 65 65 65;
+  --neutral-800: 51 51 51;
+  --neutral-900: 39 39 39;
 
   --secondary: 210 40% 96.1%;
   --secondary-foreground: 222.2 47.4% 11.2%;
 
-  --destructive: 0 84.2% 60.2%;
-  --destructive-foreground: 210 40% 98%;
-
-  --muted: 210 40% 96.1%;
-  --muted-foreground: 215.4 16.3% 46.9%;
-
   --accent: 338 31% 54%;
   --accent-foreground: 338 19% 34%;
+
+  --navbar-background: 27 27 27;
+  --navbar-foreground: 348 56% 96%;
+
 
   --border: 345 4% 19%;
 
@@ -45,7 +113,7 @@
     @apply border-border;
   }
   body {
-    @apply bg-background text-foreground;
+    @apply bg-white/80 text-black;
   }
 }
 
@@ -56,4 +124,12 @@
 
 .hidden-scroll-bar::-webkit-scrollbar {
   display: none;
+}
+
+.ant-menu-inline-collapsed-tooltip {
+  display: none !important;
+}
+
+.ju367v2v {
+  color: white !important;
 }
