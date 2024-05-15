@@ -5,7 +5,7 @@ import { PageLayout } from "@/layout";
 export default function Portfolio() {
   return (
     <PageLayout>
-      <PortfolioManagement showPage={Page.Empty} />
+      <PortfolioManagement showPage={Page.AddLiquidity} />
     </PageLayout>
   );
 }
