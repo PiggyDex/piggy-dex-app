@@ -19,7 +19,7 @@ export const PortfolioManagement: FC = () => {
   const [{ pools }] = useAtom(portfolioPoolStateAtom);
 
   return (
-    <div className="flex w-full flex-col gap-6 px-8">
+    <div className="flex h-screen w-full flex-col gap-6 bg-neutral-50 px-8">
       <div className="flex w-full items-center justify-between self-stretch py-6">
         <span className="text-[24px] font-bold leading-[28.8px] text-black">
           Portfolio Management
