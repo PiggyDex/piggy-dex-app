@@ -2,6 +2,8 @@ import { type Metadata } from "next";
 import localFont from "next/font/local";
 import type React from "react";
 
+import { PageLayout } from "@/layout";
+
 import "./globals.css";
 import { Providers } from "./providers";
 
@@ -36,7 +38,9 @@ export default function RootLayout({
         <link rel="icon" href="/favicon.ico" />
       </head>
       <body id="app" className={BDOGrotesk.className}>
-        <Providers>{children}</Providers>
+        <Providers>
+          <PageLayout>{children}</PageLayout>
+        </Providers>
       </body>
     </html>
   );
