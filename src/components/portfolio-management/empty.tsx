@@ -16,14 +16,7 @@ export const Empty: FC = () => {
         width={219}
         height={100}
       /> */}
-      <CustomConnectButton
-        px={30}
-        py={10}
-        fontSize={16}
-        fontWeight={700}
-        lineHeight={19.2}
-        borderRadius={10}
-      />
+      <CustomConnectButton />
     </div>
   );
 };

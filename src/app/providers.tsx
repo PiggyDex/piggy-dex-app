@@ -1,6 +1,5 @@
 "use client";
 
-import { StyleProvider } from "@ant-design/cssinjs";
 import { AntdRegistry } from "@ant-design/nextjs-registry";
 import NiceModal from "@ebay/nice-modal-react";
 import { RainbowKitProvider, darkTheme } from "@rainbow-me/rainbowkit";
@@ -36,9 +35,7 @@ export const Providers: FC<ProvidersProps> = ({ children }) => {
             initialChain={confluxESpaceTestnet}
           >
             <AntdRegistry>
-              <StyleProvider>
-                <NiceModal.Provider>{children}</NiceModal.Provider>
-              </StyleProvider>
+              <NiceModal.Provider>{children}</NiceModal.Provider>
             </AntdRegistry>
           </RainbowKitProvider>
         </QueryClientProvider>

@@ -48,6 +48,12 @@ const nextConfig = {
 		return config;
 	},
 	transpilePackages: ["antd"],
+	// output: 'standalone',
 };
 
+
 export default nextConfig;
+
+// import withBundleAnalyzer from '@next/bundle-analyzer';
+
+// export default process.env.ANALYZE ? withBundleAnalyzer(nextConfig) : nextConfig;

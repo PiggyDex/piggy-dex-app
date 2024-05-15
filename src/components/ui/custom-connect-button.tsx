@@ -8,12 +8,6 @@ import WalletIcon from "@/assets/wallet-icon.svg";
 import { cn } from "@/lib";
 
 type CustomConnectButtonProps = {
-  px?: number; // pixel
-  py?: number; // pixel
-  fontSize?: number; // pixel
-  fontWeight?: number; // pixel
-  lineHeight?: number; // pixel
-  borderRadius?: number; // pixel
   className?: string;
   buttonClassName?: string;
 };
