@@ -26,6 +26,7 @@ export const Providers: FC<ProvidersProps> = ({ children }) => {
       <WagmiProvider config={config}>
         <QueryClientProvider client={queryClient}>
           <RainbowKitProvider
+            coolMode
             theme={darkTheme({
               accentColor:
                 "linear-gradient(90deg, rgba(244,190,204,1) 0%, rgba(209,157,222,1) 100%)",
