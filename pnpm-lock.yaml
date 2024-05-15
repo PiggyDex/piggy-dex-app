@@ -15,11 +15,11 @@ dependencies:
     specifier: ^1.2.13
     version: 1.2.13(react-dom@18.3.1)(react@18.3.1)
   '@rainbow-me/rainbowkit':
-    specifier: ^2.0.6
-    version: 2.0.6(@types/react@18.3.1)(react-dom@18.3.1)(react@18.3.1)(viem@2.9.28)(wagmi@2.6.0)
+    specifier: ^2.0.7
+    version: 2.0.7(@types/react@18.3.1)(react-dom@18.3.1)(react@18.3.1)(viem@2.9.28)(wagmi@2.6.0)
   '@rainbow-me/rainbowkit-siwe-next-auth':
     specifier: ^0.4.0
-    version: 0.4.0(@rainbow-me/rainbowkit@2.0.6)(next-auth@4.24.7)(react@18.3.1)(siwe@2.3.2)
+    version: 0.4.0(@rainbow-me/rainbowkit@2.0.7)(next-auth@4.24.7)(react@18.3.1)(siwe@2.3.2)
   '@svgr/webpack':
     specifier: ^8.1.0
     version: 8.1.0(typescript@5.4.5)
@@ -2873,7 +2873,7 @@ packages:
     engines: {node: ^12.20.0 || ^14.18.0 || >=16.0.0}
     dev: true
 
-  /@rainbow-me/rainbowkit-siwe-next-auth@0.4.0(@rainbow-me/rainbowkit@2.0.6)(next-auth@4.24.7)(react@18.3.1)(siwe@2.3.2):
+  /@rainbow-me/rainbowkit-siwe-next-auth@0.4.0(@rainbow-me/rainbowkit@2.0.7)(next-auth@4.24.7)(react@18.3.1)(siwe@2.3.2):
     resolution: {integrity: sha512-G5RQRx42FVgniPEUdV2qaOjYwfphLcJeSt/VaeuPuXIQyX6vSUfOOCgCkVhoWKMbACZc/TG2yGMKma38blhfbw==}
     engines: {node: '>=12.4'}
     peerDependencies:
@@ -2882,18 +2882,18 @@ packages:
       react: '>=17'
       siwe: ^2.1.4
     dependencies:
-      '@rainbow-me/rainbowkit': 2.0.6(@types/react@18.3.1)(react-dom@18.3.1)(react@18.3.1)(viem@2.9.28)(wagmi@2.6.0)
+      '@rainbow-me/rainbowkit': 2.0.7(@types/react@18.3.1)(react-dom@18.3.1)(react@18.3.1)(viem@2.9.28)(wagmi@2.6.0)
       next-auth: 4.24.7(next@14.2.1)(react-dom@18.3.1)(react@18.3.1)
       react: 18.3.1
       siwe: 2.3.2(ethers@5.7.2)
     dev: false
 
-  /@rainbow-me/rainbowkit@2.0.6(@types/react@18.3.1)(react-dom@18.3.1)(react@18.3.1)(viem@2.9.28)(wagmi@2.6.0):
-    resolution: {integrity: sha512-Bl1abhfEClnlo66trh3ruGp1fIJ9s3LI4IpHxSvnB0otWrhT/ZtYuIeO7ISBGPEqst0/bfRea1TM1FCr9s0HXA==}
+  /@rainbow-me/rainbowkit@2.0.7(@types/react@18.3.1)(react-dom@18.3.1)(react@18.3.1)(viem@2.9.28)(wagmi@2.6.0):
+    resolution: {integrity: sha512-S+f7oHKsuKsddqLEdH/yyjxLgqTF6P6/+y9xDMgY9BqMVSEIn4nTlkec4fphzrVNeg/kzizCzQgF0yRHwHkLlw==}
     engines: {node: '>=12.4'}
     peerDependencies:
-      react: '>=17'
-      react-dom: '>=17'
+      react: '>=18'
+      react-dom: '>=18'
       viem: 2.x
       wagmi: 2.x
     dependencies:

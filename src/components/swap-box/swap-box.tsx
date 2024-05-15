@@ -89,12 +89,9 @@ export const SwapBox: FC = () => {
   };
 
   return (
-    <div className="flex h-screen w-full justify-center px-16">
-      <CustomConnectButton
-        className="absolute right-16 top-12 [&_*]:border-0"
-        buttonClassName="text-base not-italic font-bold leading-[120%] px-6 py-3 rounded-xl hover:cursor-pointer"
-      />
-      <div className="flex w-full flex-col items-center justify-center gap-4 rounded-[10px] bg-white px-6 py-4">
+    <div className="flex h-screen w-full items-center justify-center bg-neutral-50 px-16">
+      <CustomConnectButton />
+      <div className="flex h-fit w-full flex-col items-center justify-center gap-4 rounded-[10px] bg-white px-6 py-4">
         {/* header */}
         <div className="flex items-center self-stretch">
           <div className="flex flex-[1_1_0%] items-center gap-[10px] text-[20px] font-[400] leading-[24px] tracking-[0.4px] text-black">
