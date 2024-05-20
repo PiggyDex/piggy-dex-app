@@ -48,9 +48,24 @@ const nextConfig = {
 		return config;
 	},
 	transpilePackages: ["antd"],
-	// output: 'standalone',
+	images: {
+		remotePatterns: [
+			{
+				protocol: "https",
+				hostname: "cryptologos.cc",
+				port: "",
+				pathname: "/logos/**",
+			},
+			{
+				protocol: "https",
+				hostname: "pbs.twimg.com",
+				port: "",
+				pathname: "/profile_images/**",
+			},
+		],
+		// output: 'standalone',
+	},
 };
-
 
 export default nextConfig;
 

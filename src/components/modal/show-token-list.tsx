@@ -25,8 +25,8 @@ export const ShowTokenList: FC<ShowTokenListProps> = ({
   return (
     <div className="flex max-h-[60vh] flex-[1_0_0%] flex-col items-start gap-6 overflow-y-scroll pr-3">
       {tokenList.map((token, index) => {
-        const displayBlance =
-          parseInt(token.balance) / 10 ** parseInt(token.decimals);
+        const displayBlance = 0;
+        // parseInt(token.balance) / 10 ** parseInt(token.decimals);
         return (
           <div
             key={index}

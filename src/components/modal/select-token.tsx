@@ -12,11 +12,12 @@ import { tokenList } from "./demo-token-list";
 import { ShowTokenList } from "./show-token-list";
 
 export type TokenListProps = {
+  chainId: number;
+  address: string;
   symbol: string;
   name: string;
-  balance: string;
-  decimals: string;
-  address: string;
+  decimals: number;
+  logoURI: string;
 };
 
 type TabNameProps = {

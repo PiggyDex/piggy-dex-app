@@ -1,0 +1,5 @@
+/* HTML: <div class="loader"></div> */
+.loader {
+  animation: l1 1s linear infinite alternate;
+}
+@keyframes l1 {to{opacity: 0}}

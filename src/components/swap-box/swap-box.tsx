@@ -1,43 +1,35 @@
 "use client";
 
 import { useModal } from "@ebay/nice-modal-react";
-import { type InputNumberProps } from "antd";
+import { CurrencyAmount } from "@piggy-dex/sdk-core";
+import { Alert, type InputNumberProps } from "antd";
 import Image from "next/image";
-import { type FC, useEffect, useState } from "react";
+import { type FC, useState } from "react";
 
 import {
-  CustomConnectButton,
   PercentageButton,
-  RefeshCountSwapBox,
   SelectTokenModal,
   SwapNowButton,
   type TokenListProps,
   tokenList,
 } from "@/components";
+import { useFetchingPair, useGetTokenBalance } from "@/hooks";
 
 import { TokenBox } from "./token-box";
 import { TradeDetails } from "./trade-details";
 
 export const SwapBox: FC = () => {
+  // const chainId = useChainId({
+  //   config,
+  // });
   const modal = useModal(SelectTokenModal);
-
-  const reloadAfter = 15; // in seconds
-  const [currentCount, setCurrentCount] = useState<number>(1);
-
-  // increase the current count every second
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setCurrentCount((prev) => (prev < reloadAfter ? prev + 1 : 1));
-    }, 1000);
-
-    return () => clearInterval(interval);
-  }, []);
 
   const percentageValues = [25, 50, 75];
   const [isActives, setIsActives] = useState<boolean[]>(
     new Array(percentageValues.length).fill(false),
   );
   const [tokenAmountA, setTokenAmountA] = useState<string>("1");
+  // const [tokenAmountB, setTokenAmountB] = useState<string>("1");
   // 0 is token A
   // 1 is token B
   const [usingTokenA, setUsingTokenA] = useState<TokenListProps[]>([
@@ -47,10 +39,20 @@ export const SwapBox: FC = () => {
     tokenList[1],
   ]);
 
+  const _setUsingTokenA = (newUsingTokenA: TokenListProps[]) => {
+    if (newUsingTokenA[0] === usingTokenB[0]) return;
+    setUsingTokenA(newUsingTokenA);
+  };
+
+  const _setUsingTokenB = (newUsingTokenB: TokenListProps[]) => {
+    if (newUsingTokenB[0] === usingTokenA[0]) return;
+    setUsingTokenB(newUsingTokenB);
+  };
+
   const showModalA = () => {
     modal.show({
       usingTokens: usingTokenA,
-      setUsingTokens: setUsingTokenA,
+      setUsingTokens: _setUsingTokenA,
       title: "Select Token",
       maxSelect: 1,
       onlyShowAllTokens: false,
@@ -60,7 +62,7 @@ export const SwapBox: FC = () => {
   const showModalB = () => {
     modal.show({
       usingTokens: usingTokenB,
-      setUsingTokens: setUsingTokenB,
+      setUsingTokens: _setUsingTokenB,
       title: "Select Token",
       maxSelect: 1,
       onlyShowAllTokens: false,
@@ -85,20 +87,57 @@ export const SwapBox: FC = () => {
 
   const handleSwap = async () => {
     // await a timeout
-    await new Promise((resolve) => setTimeout(resolve, 1500));
   };
+
+  // const tokenPair = useMemo(() => {
+  //   return [usingTokenA[0], usingTokenB[0]];
+  // }, [usingTokenA, usingTokenB]);
+
+  // const [tokenPair, setTokenPair] = useState<TokenListProps[]>([
+  //   tokenList[0],
+  //   tokenList[1],
+  // ]);
+
+  const [pair, totalSupply, isLoading, ,] = useFetchingPair(
+    usingTokenA[0],
+    usingTokenB[0],
+  );
+
+  const tokenABalance = useGetTokenBalance(usingTokenA[0]);
+  const tokenBBalance = useGetTokenBalance(usingTokenB[0]);
+
+  if (!isLoading && pair) {
+    // console.log(totalSupply?.quotient.toString());
+    // const output = pair.getOutputAmount(
+    //   CurrencyAmount.fromRawAmount(
+    //     _tokenA,
+    //     convertValueToUnit(tokenAmountA, _tokenA.decimals),
+    //   ),
+    //   true,
+    // );
+    // setTokenAmountB(output[0].quotient.toString());
+  }
 
   return (
     <div className="flex h-screen w-full items-center justify-center bg-neutral-50 px-16">
-      <CustomConnectButton />
+      {/* <CustomConnectButton /> */}
       <div className="flex h-fit w-full flex-col items-center justify-center gap-4 rounded-[10px] bg-white px-6 py-4">
         {/* header */}
+        {pair &&
+          totalSupply !==
+            CurrencyAmount.fromRawAmount(pair.liquidityToken, 0) && (
+            <Alert
+              message="This Pool do not have liquidity yet."
+              description="Try to add liquidity instead."
+              type="error"
+            />
+          )}
         <div className="flex items-center self-stretch">
           <div className="flex flex-[1_1_0%] items-center gap-[10px] text-[20px] font-[400] leading-[24px] tracking-[0.4px] text-black">
             Swap
           </div>
           <div className="flex items-center justify-end gap-2">
-            <RefeshCountSwapBox currentCount={currentCount} />
+            {/* <RefeshCountSwapBox /> */}
             <Image src="/swap-settings.svg" alt="" width={24} height={24} />
           </div>
         </div>
@@ -144,7 +183,7 @@ export const SwapBox: FC = () => {
             <TokenBox
               tokens={usingTokenA}
               tokensAmount={[tokenAmountA]}
-              accountBalances={[100]}
+              accountBalances={[tokenABalance]}
               handleInputChange={[handleTokenAmountChange]}
               showModal={[showModalA]}
             />
@@ -188,8 +227,8 @@ export const SwapBox: FC = () => {
             </div>
             <TokenBox
               tokens={usingTokenB}
-              tokensAmount={[100]}
-              accountBalances={[100]}
+              tokensAmount={["1"]}
+              accountBalances={[tokenBBalance]}
               // handleInputChange={[handleTokenAmountChange]}
               showModal={[showModalB]}
             />

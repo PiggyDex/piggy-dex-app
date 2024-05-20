@@ -3,11 +3,12 @@ import Image from "next/image";
 import { type FC } from "react";
 
 import { type TokenListProps } from "@/components";
+import { convertUnitToValue } from "@/lib";
 
 export type TokenBoxProps = {
   tokens: TokenListProps[];
-  tokensAmount: string[] | number[];
-  accountBalances: number[];
+  tokensAmount: string[];
+  accountBalances: string[];
   handleInputChange?: InputNumberProps["onChange"][];
   showModal: (() => void)[];
 };
@@ -23,7 +24,7 @@ export const TokenBox: FC<TokenBoxProps> = ({
     <div className="flex flex-col items-start gap-3 self-stretch rounded-[10px] border border-solid border-[#E1A1B1] bg-[#FBF1F3] px-6 py-4">
       <div className="flex w-full items-center self-stretch">
         <div className="flex items-center gap-1">
-          <Image src="/Bitcoin.svg.png" alt="" width={32} height={32} />
+          <Image src={`${tokens[0].logoURI}`} alt="" width={32} height={32} />
           <div className="text-[16px] font-[400] leading-[19.2px] text-[#5C5C5C]">
             {tokens[0].symbol}
           </div>
@@ -45,13 +46,13 @@ export const TokenBox: FC<TokenBoxProps> = ({
           variant="borderless"
           step="0.000000001"
           precision={9}
-          max="1000000000"
+          max={convertUnitToValue(accountBalances[0], tokens[0].decimals)}
           stringMode
           disabled={!handleInputChange}
         />
       </div>
       <div className="text-[16px] font-[400] leading-[19.2px] text-[#5C5C5C]">
-        Balance: {accountBalances[0]}
+        Balance: {convertUnitToValue(accountBalances[0], tokens[0].decimals)}
       </div>
     </div>
   );

@@ -6,11 +6,13 @@
 import { type FC } from "react";
 
 // import { portfolioPoolStateAtom } from "@/atoms";
-import { CustomConnectButton, type TokenListProps } from "@/components";
+import {
+  AddLiquidty,
+  CustomConnectButton,
+  Empty,
+  type TokenListProps,
+} from "@/components";
 import { Page } from "@/constants";
-
-import { AddLiquidty } from "./add-liquidity";
-import { Empty } from "./empty";
 
 // const PoolStateMap = {
 //   ["0"]: <Empty />,

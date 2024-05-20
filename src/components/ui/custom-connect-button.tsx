@@ -41,14 +41,14 @@ export const CustomConnectButton: FC<CustomConnectButtonProps> = ({
         return (
           <div
             className={cn("absolute right-16 top-12 [&_*]:border-0", className)}
-            {...(!ready && {
-              "aria-hidden": true,
-              style: {
-                opacity: 0,
-                pointerEvents: "none",
-                userSelect: "none",
-              },
-            })}
+            // {...(!ready && {
+            // 	"aria-hidden": true,
+            // 	style: {
+            // 		opacity: 0,
+            // 		pointerEvents: "none",
+            // 		userSelect: "none",
+            // 	},
+            // })}
           >
             {/* // className={`py-[${py}px] px-[${px}px]  leading-[${lineHeight}px] rounded-[${borderRadius}px] bg-gradient-to-r from-[#F4BECC] to-[#D19DDE] font-[700] text-[#58303A]`} */}
             {(() => {
