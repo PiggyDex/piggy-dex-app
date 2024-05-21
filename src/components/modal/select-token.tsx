@@ -12,7 +12,7 @@ import { tokenList } from "./demo-token-list";
 import { ShowTokenList } from "./show-token-list";
 
 export type TokenListProps = {
-  chainId: number;
+  chainId: 71 | 1030;
   address: string;
   symbol: string;
   name: string;
