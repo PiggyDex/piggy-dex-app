@@ -7,18 +7,10 @@ import { useRouter } from "next/navigation";
 import { type FC, useState } from "react";
 
 import { Page } from "@/constants";
+import { useTokenList } from "@/hooks";
+import { type TokenInterface } from "@/types";
 
-import { tokenList } from "./demo-token-list";
 import { ShowTokenList } from "./show-token-list";
-
-export type TokenListProps = {
-  chainId: number;
-  address: string;
-  symbol: string;
-  name: string;
-  decimals: number;
-  logoURI: string;
-};
 
 type TabNameProps = {
   name: string;
@@ -42,8 +34,8 @@ export const SelectTokenModal = NiceModal.create(
     onlyShowAllTokens,
     showPageAfterSelect,
   }: {
-    usingTokens: TokenListProps[];
-    setUsingTokens: (newUsingTokens: TokenListProps[]) => void;
+    usingTokens: TokenInterface[];
+    setUsingTokens: (newUsingTokens: TokenInterface[]) => void;
     title: string;
     maxSelect: number;
     // closeAfterSelecting: boolean;
@@ -53,9 +45,11 @@ export const SelectTokenModal = NiceModal.create(
     const modal = useModal();
     const router = useRouter();
 
+    const { tokenList } = useTokenList();
+
     const [displayTokenList, setDisplayTokenList] =
-      useState<TokenListProps[]>(tokenList);
-    const [chosenTokens, setChosenTokens] = useState<TokenListProps[]>([]);
+      useState<TokenInterface[]>(tokenList);
+    const [chosenTokens, setChosenTokens] = useState<TokenInterface[]>([]);
 
     const items: TabsProps["items"] = [
       {

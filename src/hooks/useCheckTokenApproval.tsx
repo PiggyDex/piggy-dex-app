@@ -5,14 +5,14 @@ import Big from "big.js";
 import { useCallback, useEffect, useState } from "react";
 import { useAccount, useChainId } from "wagmi";
 
-import { type TokenListProps } from "@/components";
+import { type TokenInterface } from "@/components";
 import { convertValueToUnit } from "@/lib";
 import config from "@/wagmi.config";
 
 const erc20Abi = IERC20.abi;
 
 export const useCheckTokenApproval = (
-  tokens: TokenListProps[],
+  tokens: TokenInterface[],
   tokenAmounts: string[],
 ): [boolean, boolean[]] => {
   const chainId = useChainId();

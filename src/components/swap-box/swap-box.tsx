@@ -10,10 +10,9 @@ import {
   PercentageButton,
   SelectTokenModal,
   SwapNowButton,
-  type TokenListProps,
-  tokenList,
 } from "@/components";
-import { useFetchingPair, useGetTokenBalance } from "@/hooks";
+import { useFetchingPair, useGetTokenBalance, useTokenList } from "@/hooks";
+import { type TokenInterface } from "@/types";
 
 import { TokenBox } from "./token-box";
 import { TradeDetails } from "./trade-details";
@@ -28,23 +27,26 @@ export const SwapBox: FC = () => {
   const [isActives, setIsActives] = useState<boolean[]>(
     new Array(percentageValues.length).fill(false),
   );
+
+  const { tokenList } = useTokenList();
+
   const [tokenAmountA, setTokenAmountA] = useState<string>("1");
   // const [tokenAmountB, setTokenAmountB] = useState<string>("1");
   // 0 is token A
   // 1 is token B
-  const [usingTokenA, setUsingTokenA] = useState<TokenListProps[]>([
+  const [usingTokenA, setUsingTokenA] = useState<TokenInterface[]>([
     tokenList[0],
   ]);
-  const [usingTokenB, setUsingTokenB] = useState<TokenListProps[]>([
+  const [usingTokenB, setUsingTokenB] = useState<TokenInterface[]>([
     tokenList[1],
   ]);
 
-  const _setUsingTokenA = (newUsingTokenA: TokenListProps[]) => {
+  const _setUsingTokenA = (newUsingTokenA: TokenInterface[]) => {
     if (newUsingTokenA[0] === usingTokenB[0]) return;
     setUsingTokenA(newUsingTokenA);
   };
 
-  const _setUsingTokenB = (newUsingTokenB: TokenListProps[]) => {
+  const _setUsingTokenB = (newUsingTokenB: TokenInterface[]) => {
     if (newUsingTokenB[0] === usingTokenA[0]) return;
     setUsingTokenB(newUsingTokenB);
   };
@@ -93,7 +95,7 @@ export const SwapBox: FC = () => {
   //   return [usingTokenA[0], usingTokenB[0]];
   // }, [usingTokenA, usingTokenB]);
 
-  // const [tokenPair, setTokenPair] = useState<TokenListProps[]>([
+  // const [tokenPair, setTokenPair] = useState<TokenInterface[]>([
   //   tokenList[0],
   //   tokenList[1],
   // ]);

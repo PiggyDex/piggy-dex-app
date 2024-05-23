@@ -4,15 +4,16 @@ import { Pair } from "@piggy-dex/v2-sdk";
 import { readContract } from "@wagmi/core";
 import type Big from "big.js";
 import { useEffect, useMemo, useState } from "react";
+import { useChainId } from "wagmi";
 
-import { type TokenListProps } from "@/components";
+import { type TokenInterface } from "@/types";
 import config from "@/wagmi.config";
 
 const PairAbi = UniswapV2Pair.abi;
 
 export const useFetchingPair = (
-  tokenA: TokenListProps,
-  tokenB: TokenListProps,
+  tokenA: TokenInterface,
+  tokenB: TokenInterface,
 ): [
   Pair | undefined,
   CurrencyAmount<Token> | undefined,
@@ -20,14 +21,16 @@ export const useFetchingPair = (
   Token,
   Token,
 ] => {
+  const chainId = useChainId();
+
   const _tokenA: Token = useMemo(
-    () => new Token(tokenA.chainId, tokenA.address, tokenA.decimals),
-    [tokenA],
+    () => new Token(chainId, tokenA.address, tokenA.decimals),
+    [chainId, tokenA],
   );
 
   const _tokenB: Token = useMemo(
-    () => new Token(tokenB.chainId, tokenB.address, tokenB.decimals),
-    [tokenB],
+    () => new Token(chainId, tokenB.address, tokenB.decimals),
+    [chainId, tokenB],
   );
 
   const [pair, setPair] = useState<Pair | undefined>(undefined);

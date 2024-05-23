@@ -62,6 +62,12 @@ const nextConfig = {
 				port: "",
 				pathname: "/profile_images/**",
 			},
+			{
+				protocol: "https",
+				hostname: "scanglobal.oss-cn-hongkong.aliyuncs.com",
+				port: "",
+				pathname: "/mainnet/**",
+			},
 		],
 		// output: 'standalone',
 	},

@@ -6,13 +6,9 @@
 import { type FC } from "react";
 
 // import { portfolioPoolStateAtom } from "@/atoms";
-import {
-  AddLiquidty,
-  CustomConnectButton,
-  Empty,
-  type TokenListProps,
-} from "@/components";
+import { AddLiquidty, CustomConnectButton, Empty } from "@/components";
 import { Page } from "@/constants";
+import { type TokenInterface } from "@/types";
 
 // const PoolStateMap = {
 //   ["0"]: <Empty />,
@@ -21,8 +17,8 @@ import { Page } from "@/constants";
 
 export type PortfolioManagementProps = {
   showPage: number;
-  tokenA?: TokenListProps;
-  tokenB?: TokenListProps;
+  tokenA?: TokenInterface;
+  tokenB?: TokenInterface;
 };
 
 export const PortfolioManagement: FC<PortfolioManagementProps> = ({

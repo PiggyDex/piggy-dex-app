@@ -6,32 +6,53 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
 
-export function convertUnitToValue(balance: string | Big, decimals: number) {
+export function convertUnitToValue(
+  balance: string | Big | bigint,
+  decimals: number,
+) {
   let temp;
-  if (typeof balance === "string") {
-    temp = Big(balance);
-  } else {
-    temp = balance;
+  switch (typeof balance) {
+    case "string":
+      temp = Big(balance);
+      break;
+    case "bigint":
+      temp = Big(balance.toString());
+      break;
+    default:
+      temp = balance;
   }
   return temp.div(Big(10).pow(decimals)).toFixed();
 }
 
-export function convertValueToUnit(value: string | Big, decimals: number) {
+export function convertValueToUnit(
+  value: string | Big | bigint,
+  decimals: number,
+) {
   let temp;
-  if (typeof value === "string") {
-    temp = Big(value);
-  } else {
-    temp = value;
+  switch (typeof value) {
+    case "string":
+      temp = Big(value);
+      break;
+    case "bigint":
+      temp = Big(value.toString());
+      break;
+    default:
+      temp = value;
   }
   return temp.times(Big(10).pow(decimals)).toFixed();
 }
 
-export function formatPercentage(percentage: string | Big) {
+export function formatPercentage(percentage: string | Big | bigint) {
   let temp;
-  if (typeof percentage === "string") {
-    temp = Big(percentage);
-  } else {
-    temp = percentage;
+  switch (typeof percentage) {
+    case "string":
+      temp = Big(percentage);
+      break;
+    case "bigint":
+      temp = Big(percentage.toString());
+      break;
+    default:
+      temp = percentage;
   }
   return temp.times(100).toFixed(2);
 }

@@ -13,23 +13,22 @@ import {
   type PortfolioManagementProps,
   SelectTokenModal,
   Supply,
-  type TokenListProps,
-  tokenList,
 } from "@/components";
 import { Page } from "@/constants";
+import { useTokenList } from "@/hooks";
+import { type TokenInterface } from "@/types";
 
 import "./loader-text.css";
 
 const erc20Abi = IERC20.abi;
 
 type ChoosePairProps = {
-  tokens: TokenListProps[];
-  setTokens: (tokens: TokenListProps[]) => void;
+  tokens: TokenInterface[];
+  setTokens: (tokens: TokenInterface[]) => void;
 };
 
 export const ChoosePair: FC<ChoosePairProps> = ({ tokens, setTokens }) => {
   const modal = useModal(SelectTokenModal);
-
   const showModal = () => {
     modal.show({
       usingTokens: tokens,
@@ -74,6 +73,8 @@ export const AddLiquidty: FC<PortfolioManagementProps> = ({
   const router = useRouter();
   const { address, status } = useAccount();
 
+  const { tokenList } = useTokenList();
+
   const showModalA = () => {
     modal.show({
       usingTokens: usingTokenA,
@@ -99,14 +100,14 @@ export const AddLiquidty: FC<PortfolioManagementProps> = ({
 
   // 0 is token A
   // 1 is token B
-  const [usingTokenA, setUsingTokenA] = useState<TokenListProps[]>([
+  const [usingTokenA, setUsingTokenA] = useState<TokenInterface[]>([
     tokenA || tokenList[0],
   ]);
-  const [usingTokenB, setUsingTokenB] = useState<TokenListProps[]>([
+  const [usingTokenB, setUsingTokenB] = useState<TokenInterface[]>([
     tokenB || tokenList[1],
   ]);
 
-  const _setUsingTokenA = (newUsingTokenA: TokenListProps[]) => {
+  const _setUsingTokenA = (newUsingTokenA: TokenInterface[]) => {
     if (newUsingTokenA[0].address === usingTokenB[0].address) return;
     setUsingTokenA(newUsingTokenA);
     router.push(
@@ -114,7 +115,7 @@ export const AddLiquidty: FC<PortfolioManagementProps> = ({
     );
   };
 
-  const _setUsingTokenB = (newUsingTokenB: TokenListProps[]) => {
+  const _setUsingTokenB = (newUsingTokenB: TokenInterface[]) => {
     if (newUsingTokenB[0].address === usingTokenA[0].address) return;
     setUsingTokenB(newUsingTokenB);
     router.push(
@@ -122,7 +123,7 @@ export const AddLiquidty: FC<PortfolioManagementProps> = ({
     );
   };
 
-  const [usingTokens, setUsingTokens] = useState<TokenListProps[]>([
+  const [usingTokens, setUsingTokens] = useState<TokenInterface[]>([
     usingTokenA[0],
     usingTokenB[0],
   ]);

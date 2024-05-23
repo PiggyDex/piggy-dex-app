@@ -1,17 +1,17 @@
 import Image from "next/image";
 import { type FC, useEffect } from "react";
 
-import { type TokenListProps } from ".";
+import { type TokenInterface } from "@/types";
 
-type ShowTokenListProps = {
+type ShowTokenInterface = {
   maxSelect: number;
-  tokenList: TokenListProps[];
-  usingTokens: TokenListProps[];
-  setUsingTokens: (newUsingTokens: TokenListProps[]) => void;
-  updateTokenList: (newTokenList: TokenListProps[]) => void;
+  tokenList: TokenInterface[];
+  usingTokens: TokenInterface[];
+  setUsingTokens: (newUsingTokens: TokenInterface[]) => void;
+  updateTokenList: (newTokenList: TokenInterface[]) => void;
 };
 
-export const ShowTokenList: FC<ShowTokenListProps> = ({
+export const ShowTokenList: FC<ShowTokenInterface> = ({
   maxSelect,
   tokenList,
   usingTokens,

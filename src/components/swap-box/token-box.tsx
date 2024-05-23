@@ -2,11 +2,11 @@ import { InputNumber, type InputNumberProps } from "antd";
 import Image from "next/image";
 import { type FC } from "react";
 
-import { type TokenListProps } from "@/components";
 import { convertUnitToValue } from "@/lib";
+import { type TokenInterface } from "@/types";
 
 export type TokenBoxProps = {
-  tokens: TokenListProps[];
+  tokens: TokenInterface[];
   tokensAmount: string[];
   accountBalances: string[];
   handleInputChange?: InputNumberProps["onChange"][];

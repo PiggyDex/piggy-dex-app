@@ -1,7 +1,8 @@
 import { redirect } from "next/navigation";
 
-import { PortfolioManagement, tokenList } from "@/components";
+import { PortfolioManagement } from "@/components";
 import { Page } from "@/constants";
+import { useTokenList } from "@/hooks";
 
 export default function Portfolio({
   // params,
@@ -16,6 +17,8 @@ export default function Portfolio({
   if (tokenA === undefined || tokenB === undefined) {
     redirect("/portfolio/add/");
   }
+
+  const { tokenList } = useTokenList();
 
   const _tokenA = tokenList.find(
     (token) => token.address.toLowerCase() === tokenA.toLowerCase(),
