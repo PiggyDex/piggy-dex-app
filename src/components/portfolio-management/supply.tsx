@@ -19,7 +19,7 @@ import {
 } from "wagmi";
 
 import { TokenBox, type TokenBoxProps } from "@/components";
-import { useCheckTokenApproval, useFetchingPair } from "@/hooks";
+import { useCheckTokenApproval, useFetchingPairData } from "@/hooks";
 import {
   calculatePercent,
   cn,
@@ -63,7 +63,7 @@ export const Supply: FC<TokenBoxProps> = ({
   handleInputChange,
   showModal,
 }) => {
-  const [pair, totalSupply, , ,] = useFetchingPair(tokens[0], tokens[1]);
+  const { pair, liquidity } = useFetchingPairData(tokens[0], tokens[1]);
   const [isLoadingApproval, allAproved] = useCheckTokenApproval(
     tokens,
     tokensAmount,
@@ -97,14 +97,17 @@ export const Supply: FC<TokenBoxProps> = ({
     tokenB,
     Big(tokensAmount[1]).mul(Big(10).pow(tokenB.decimals)).toFixed(),
   );
-  const liquidityMinted: Big =
-    pair && totalSupply
-      ? new Big(
-          pair
-            .getLiquidityMinted(totalSupply, currencyAmountA, currencyAmountB)
-            .quotient.toString(),
-        )
-      : Big(0);
+  const liquidityMinted: Big = liquidity
+    ? new Big(
+        pair
+          .getLiquidityMinted(
+            CurrencyAmount.fromRawAmount(pair.liquidityToken, liquidity),
+            currencyAmountA,
+            currencyAmountB,
+          )
+          .quotient.toString(),
+      )
+    : Big(0);
 
   const slippageTolerance = 0.5;
 
@@ -187,14 +190,14 @@ export const Supply: FC<TokenBoxProps> = ({
               <div className="h-px bg-[#FBF1F3]"></div>
               <Item
                 name="Pool Share"
-                value={`${totalSupply ? formatPercentage(calculatePercent(liquidityMinted, totalSupply.quotient.toString())) : 0} %`}
+                value={`${liquidity ? formatPercentage(calculatePercent(liquidityMinted, liquidity)) : 0} %`}
               />
               <div className="h-px bg-[#FBF1F3]"></div>
               <Item name="Rate" value="1 AOT = 0 MEGG" />
               <div className="h-px bg-[#FBF1F3]"></div>
               <Item
                 name="Total Pool Supply"
-                value={`${formatSplitDigit(Big(liquidityMinted).add(totalSupply ? totalSupply.quotient.toString() : Big(0)), 18)} (AOT - MEGG) LP`}
+                value={`${formatSplitDigit(Big(liquidityMinted).add(liquidity ? liquidity : Big(0)), 18)} (AOT - MEGG) LP`}
               />
               <div className="h-px bg-[#FBF1F3]"></div>
               <Item name="Slippage Tolerance" value={`${slippageTolerance}%`} />

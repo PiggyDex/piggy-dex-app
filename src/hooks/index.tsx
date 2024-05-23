@@ -1,3 +1,3 @@
 export * from "./useCheckTokenApproval";
-export * from "./useFetchingPair";
+export * from "./useFetchingPairData";
 export * from "./useGetTokenBalance";

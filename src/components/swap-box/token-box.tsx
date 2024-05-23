@@ -38,7 +38,7 @@ export const TokenBox: FC<TokenBoxProps> = ({
           />
         </div>
         <InputNumber
-          value={tokensAmount[0].toString()}
+          value={tokensAmount[0]}
           onChange={handleInputChange ? handleInputChange[0] : undefined}
           className="w-auto flex-[1_1_0%] items-end justify-center rounded border !border-transparent !bg-transparent p-2 text-[16px] font-[400] leading-[19.2px] text-[#5C5C5C] [&_.ant-input-number-input]:text-right"
           inputMode="numeric"
@@ -52,7 +52,8 @@ export const TokenBox: FC<TokenBoxProps> = ({
         />
       </div>
       <div className="text-[16px] font-[400] leading-[19.2px] text-[#5C5C5C]">
-        Balance: {convertUnitToValue(accountBalances[0], tokens[0].decimals)}
+        Balance:{" "}
+        {convertUnitToValue(accountBalances[0], tokens[0].decimals).slice(0, 9)}
       </div>
     </div>
   );
