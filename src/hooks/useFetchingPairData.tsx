@@ -1,8 +1,10 @@
+"use client";
+
 import { CurrencyAmount, Token } from "@piggy-dex/sdk-core";
 import UniswapV2Pair from "@piggy-dex/v2-contracts/out/UniswapV2Pair.sol/UniswapV2Pair.json";
 import { Pair } from "@piggy-dex/v2-sdk";
 import { readContract } from "@wagmi/core";
-import type Big from "big.js";
+import Big from "big.js";
 import { useEffect, useMemo, useState } from "react";
 import { useChainId } from "wagmi";
 
@@ -11,34 +13,43 @@ import config from "@/wagmi.config";
 
 const PairAbi = UniswapV2Pair.abi;
 
-export const useFetchingPair = (
+export const useFetchingPairData = (
   tokenA: TokenInterface,
   tokenB: TokenInterface,
-): [
-  Pair | undefined,
-  CurrencyAmount<Token> | undefined,
-  boolean,
-  Token,
-  Token,
-] => {
+): {
+  pair: Pair;
+  liquidity: string;
+  isFetchingPairData: boolean;
+  _tokenA: Token;
+  _tokenB: Token;
+} => {
+  const [isFetchingPairData, setIsFetchingPairData] = useState<boolean>(true);
+
   const chainId = useChainId();
+  const [pair, setPair] = useState<Pair>(
+    new Pair(
+      CurrencyAmount.fromRawAmount(
+        new Token(chainId, tokenA.address, tokenA.decimals),
+        "0",
+      ),
+      CurrencyAmount.fromRawAmount(
+        new Token(chainId, tokenB.address, tokenB.decimals),
+        "0",
+      ),
+    ),
+  );
+  const [liquidity, setLiquidity] = useState<string>("0");
 
-  const _tokenA: Token = useMemo(
+  const _tokenA = useMemo(
     () => new Token(chainId, tokenA.address, tokenA.decimals),
-    [chainId, tokenA],
+    [tokenA, chainId],
   );
 
-  const _tokenB: Token = useMemo(
+  const _tokenB = useMemo(
     () => new Token(chainId, tokenB.address, tokenB.decimals),
-    [chainId, tokenB],
+    [tokenB, chainId],
   );
 
-  const [pair, setPair] = useState<Pair | undefined>(undefined);
-  const [liquidity, setLiquidity] = useState<CurrencyAmount<Token> | undefined>(
-    undefined,
-  );
-
-  const [isLoading, setIsLoading] = useState<boolean>(true);
   const pairAddress = useMemo(
     () => Pair.getAddress(_tokenA, _tokenB),
     [_tokenA, _tokenB],
@@ -51,37 +62,41 @@ export const useFetchingPair = (
           abi: PairAbi,
           address: pairAddress as `0x${string}`,
           functionName: "getReserves",
+          chainId: chainId === 71 || chainId === 1030 ? chainId : undefined,
         });
+
         const liquidity = await readContract(config, {
           abi: PairAbi,
           address: pairAddress as `0x${string}`,
           functionName: "totalSupply",
+          chainId: chainId === 71 || chainId === 1030 ? chainId : undefined,
         });
         return [
-          (reserves as [Big, Big])[0].toString(),
-          (reserves as [Big, Big])[1].toString(),
-          (liquidity as Big).toString(),
+          Big((reserves as [Big, Big])[0].toString()).toFixed(),
+          Big((reserves as [Big, Big])[1].toString()).toFixed(),
+          Big((liquidity as Big).toString()).toFixed(),
         ];
       } catch (error) {
         return ["0", "0", "0"];
       }
     };
-
-    const fetchData = async () => {
-      setIsLoading(true);
-      const [reserve0, reserve1, liquidity] = await fetchPairData();
+    fetchPairData().then((value) => {
+      const [reserve0, reserve1, liquidity] = value;
       const pairCreated: Pair = new Pair(
         CurrencyAmount.fromRawAmount(_tokenA, reserve0),
         CurrencyAmount.fromRawAmount(_tokenB, reserve1),
       );
       setPair(pairCreated);
-      const tokenLiquidity: Token = pairCreated.liquidityToken;
-      setLiquidity(CurrencyAmount.fromRawAmount(tokenLiquidity, liquidity));
-      setIsLoading(false);
-    };
+      setLiquidity(liquidity);
+      setIsFetchingPairData(false);
+    });
+  }, [_tokenA, _tokenB, pairAddress, chainId]);
 
-    fetchData();
-  }, [pairAddress, _tokenA, _tokenB]);
-
-  return [pair, liquidity, isLoading, _tokenA, _tokenB];
+  return {
+    pair,
+    liquidity,
+    isFetchingPairData,
+    _tokenA,
+    _tokenB,
+  };
 };

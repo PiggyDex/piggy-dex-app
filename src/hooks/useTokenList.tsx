@@ -1,5 +1,3 @@
-import { useChainId } from "wagmi";
-
 import { type TokenInterface } from "@/types";
 
 const mainnetTokenList: TokenInterface[] = [
@@ -120,8 +118,7 @@ const testnetTokenList: TokenInterface[] = [
   },
 ];
 
-export const useTokenList = () => {
-  const chainId = useChainId();
+export const useTokenList = (chainId: number) => {
   if (chainId === 1030) {
     return { tokenList: mainnetTokenList };
   }

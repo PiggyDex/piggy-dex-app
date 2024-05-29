@@ -1,13 +1,11 @@
 "use client";
 
 import { useModal } from "@ebay/nice-modal-react";
-import IERC20 from "@piggy-dex/v2-contracts/out/contracts/interfaces/IERC20.sol/IERC20.json";
 import { Alert, Button, type InputNumberProps } from "antd";
-import type Big from "big.js";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { type FC, useState } from "react";
-import { useAccount, useReadContract } from "wagmi";
+import { useAccount, useChainId } from "wagmi";
 
 import {
   type PortfolioManagementProps,
@@ -15,19 +13,24 @@ import {
   Supply,
 } from "@/components";
 import { Page } from "@/constants";
-import { useTokenList } from "@/hooks";
+import { useGetTokenBalance, useTokenList } from "@/hooks";
 import { type TokenInterface } from "@/types";
 
 import "./loader-text.css";
 
-const erc20Abi = IERC20.abi;
+const NATIVE_TOKEN_ADDRESS = "0x0000000000000000000000000000000000000000";
 
 type ChoosePairProps = {
   tokens: TokenInterface[];
   setTokens: (tokens: TokenInterface[]) => void;
+  tokenList: TokenInterface[];
 };
 
-export const ChoosePair: FC<ChoosePairProps> = ({ tokens, setTokens }) => {
+export const ChoosePair: FC<ChoosePairProps> = ({
+  tokens,
+  setTokens,
+  tokenList,
+}) => {
   const modal = useModal(SelectTokenModal);
   const showModal = () => {
     modal.show({
@@ -37,6 +40,7 @@ export const ChoosePair: FC<ChoosePairProps> = ({ tokens, setTokens }) => {
       maxSelect: 2,
       onlyShowAllTokens: false,
       showPageAfterSelect: Page.Supply,
+      tokenList,
     });
   };
 
@@ -71,10 +75,13 @@ export const AddLiquidty: FC<PortfolioManagementProps> = ({
 }) => {
   const modal = useModal(SelectTokenModal);
   const router = useRouter();
-  const { address, status } = useAccount();
+  const { status } = useAccount();
 
-  const { tokenList } = useTokenList();
-
+  const chainId = useChainId();
+  const { tokenList: rawTokenList } = useTokenList(chainId);
+  const tokenList = rawTokenList.filter(
+    (token) => token.address !== NATIVE_TOKEN_ADDRESS,
+  );
   const showModalA = () => {
     modal.show({
       usingTokens: usingTokenA,
@@ -82,6 +89,7 @@ export const AddLiquidty: FC<PortfolioManagementProps> = ({
       title: "Select Token",
       maxSelect: 1,
       onlyShowAllTokens: false,
+      tokenList,
     });
   };
 
@@ -92,6 +100,7 @@ export const AddLiquidty: FC<PortfolioManagementProps> = ({
       title: "Select Token",
       maxSelect: 1,
       onlyShowAllTokens: false,
+      tokenList,
     });
   };
 
@@ -136,21 +145,8 @@ export const AddLiquidty: FC<PortfolioManagementProps> = ({
     setTokenAmountB(parseFloat(value as string).toString());
   };
 
-  const { data: tokenABalance, isLoading: isFetchingBalanceA } =
-    useReadContract({
-      abi: erc20Abi,
-      address: usingTokenA[0].address as `0x${string}`,
-      functionName: "balanceOf",
-      args: [address],
-    });
-
-  const { data: tokenBBalance, isLoading: isFetchingBalanceB } =
-    useReadContract({
-      abi: erc20Abi,
-      address: usingTokenB[0].address as `0x${string}`,
-      functionName: "balanceOf",
-      args: [address],
-    });
+  const tokenABalance = useGetTokenBalance(tokenA || usingTokenA[0]);
+  const tokenBBalance = useGetTokenBalance(tokenB || usingTokenB[0]);
 
   if (status === "connecting" || status === "reconnecting") {
     return <></>;
@@ -164,10 +160,6 @@ export const AddLiquidty: FC<PortfolioManagementProps> = ({
         type="error"
       />
     );
-  }
-
-  if (isFetchingBalanceA || isFetchingBalanceB) {
-    return <></>;
   }
 
   return (
@@ -230,16 +222,17 @@ export const AddLiquidty: FC<PortfolioManagementProps> = ({
       </div>
 
       {(showPage & Page.ChoosePair) > 0 && (
-        <ChoosePair tokens={usingTokens} setTokens={setUsingTokens} />
+        <ChoosePair
+          tokens={usingTokens}
+          setTokens={setUsingTokens}
+          tokenList={tokenList}
+        />
       )}
       {(showPage && Page.Supply) > 0 && tokenA && tokenB && (
         <Supply
           tokens={[usingTokenA[0], usingTokenB[0]]}
           tokensAmount={[tokenAmountA, tokenAmountB]}
-          accountBalances={[
-            (tokenABalance as Big).toString(),
-            (tokenBBalance as Big).toString(),
-          ]}
+          accountBalances={[tokenABalance.toString(), tokenBBalance.toString()]}
           handleInputChange={[
             handleTokenAmountAChange,
             handleTokenAmountBChange,

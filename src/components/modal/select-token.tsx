@@ -7,7 +7,6 @@ import { useRouter } from "next/navigation";
 import { type FC, useState } from "react";
 
 import { Page } from "@/constants";
-import { useTokenList } from "@/hooks";
 import { type TokenInterface } from "@/types";
 
 import { ShowTokenList } from "./show-token-list";
@@ -33,6 +32,7 @@ export const SelectTokenModal = NiceModal.create(
     // closeAfterSelecting,
     onlyShowAllTokens,
     showPageAfterSelect,
+    tokenList,
   }: {
     usingTokens: TokenInterface[];
     setUsingTokens: (newUsingTokens: TokenInterface[]) => void;
@@ -41,11 +41,10 @@ export const SelectTokenModal = NiceModal.create(
     // closeAfterSelecting: boolean;
     onlyShowAllTokens: boolean;
     showPageAfterSelect?: number;
+    tokenList: TokenInterface[];
   }) => {
     const modal = useModal();
     const router = useRouter();
-
-    const { tokenList } = useTokenList();
 
     const [displayTokenList, setDisplayTokenList] =
       useState<TokenInterface[]>(tokenList);

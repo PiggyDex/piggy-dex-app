@@ -1,3 +1,5 @@
+"use client";
+
 import { V2_ROUTER_ADDRESSES } from "@piggy-dex/sdk-core";
 import IERC20 from "@piggy-dex/v2-contracts/out/contracts/interfaces/IERC20.sol/IERC20.json";
 import { readContract, simulateContract, writeContract } from "@wagmi/core";
@@ -5,8 +7,8 @@ import Big from "big.js";
 import { useCallback, useEffect, useState } from "react";
 import { useAccount, useChainId } from "wagmi";
 
-import { type TokenInterface } from "@/components";
 import { convertValueToUnit } from "@/lib";
+import { type TokenInterface } from "@/types";
 import config from "@/wagmi.config";
 
 const erc20Abi = IERC20.abi;

@@ -4,15 +4,16 @@ import { type FC } from "react";
 
 type SwapNowButtonProps = {
   handleSwap: () => void;
+  text: string;
 };
 
-export const SwapNowButton: FC<SwapNowButtonProps> = ({ handleSwap }) => {
+export const SwapNowButton: FC<SwapNowButtonProps> = ({ handleSwap, text }) => {
   return (
     <Button
-      className="flex h-auto items-center justify-center gap-[10px] rounded-[10px] border-0 bg-[#FBF1F3] px-14 py-[10px] text-[#F1D4DB] hover:bg-[#E1A1B1] hover:text-[#58303A]"
+      className="flex h-auto items-center justify-center gap-[10px] rounded-[10px] border-0 bg-primary-200 px-14 py-[10px] text-primary-900 hover:bg-primary-400"
       onClick={handleSwap}
     >
-      <div className="text-[16px] font-[700] leading-[19.2px]">Swap now</div>
+      <span className="text-[16px] font-[700] leading-[19.2px]">{text}</span>
       <Image src="/swap-now.svg" alt="" width={24} height={24} />
     </Button>
   );
