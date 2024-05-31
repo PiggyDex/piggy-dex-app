@@ -44,8 +44,6 @@ export const TokenBox: FC<TokenBoxProps> = ({
           inputMode="numeric"
           controls={false}
           variant="borderless"
-          step="0.000000001"
-          precision={9}
           max={convertUnitToValue(accountBalances[0], tokens[0].decimals)}
           stringMode
           disabled={!handleInputChange}

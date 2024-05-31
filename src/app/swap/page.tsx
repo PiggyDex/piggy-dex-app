@@ -24,7 +24,7 @@ export default function Swap({
 
   if (_tokenA === undefined || _tokenB === undefined) {
     redirect(
-      `/swap?tokenA=${tokenList[0].address}&tokenB=${tokenList[1].address}`,
+      `/swap?tokenA=${tokenList[1].address}&tokenB=${tokenList[3].address}`,
     );
   }
 

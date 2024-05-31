@@ -18,8 +18,6 @@ import { type TokenInterface } from "@/types";
 
 import "./loader-text.css";
 
-const NATIVE_TOKEN_ADDRESS = "0x0000000000000000000000000000000000000000";
-
 type ChoosePairProps = {
   tokens: TokenInterface[];
   setTokens: (tokens: TokenInterface[]) => void;
@@ -78,10 +76,7 @@ export const AddLiquidty: FC<PortfolioManagementProps> = ({
   const { status } = useAccount();
 
   const chainId = useChainId();
-  const { tokenList: rawTokenList } = useTokenList(chainId);
-  const tokenList = rawTokenList.filter(
-    (token) => token.address !== NATIVE_TOKEN_ADDRESS,
-  );
+  const { tokenList } = useTokenList(chainId);
   const showModalA = () => {
     modal.show({
       usingTokens: usingTokenA,

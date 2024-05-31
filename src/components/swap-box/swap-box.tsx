@@ -56,8 +56,8 @@ export const SwapBox: FC<SwapBoxProps> = ({ tokenA, tokenB }) => {
     new Array(percentageValues.length).fill(false),
   );
 
-  const [tokenAmountA, setTokenAmountA] = useState<string>("1");
-  const [tokenAmountB, setTokenAmountB] = useState<string>("1");
+  const [tokenAmountA, setTokenAmountA] = useState<string>("0.0");
+  const [tokenAmountB, setTokenAmountB] = useState<string>("0.0");
 
   // 0 is token A
   // 1 is token B
@@ -167,10 +167,13 @@ export const SwapBox: FC<SwapBoxProps> = ({ tokenA, tokenB }) => {
   const handleSwap = async () => {
     if (tokenA.symbol === "CFX" && tokenB.symbol === "WCFX") {
       wrapNativeToken();
+      return;
     }
     if (tokenA.symbol === "WCFX" && tokenB.symbol === "CFX") {
       unwrapNativeToken();
+      return;
     }
+
     // await a timeout
     if (chainId && address && !isFetchingPairData && liquidity !== "0") {
       const route = new Route([pair], _tokenA, _tokenB);
@@ -183,8 +186,42 @@ export const SwapBox: FC<SwapBoxProps> = ({ tokenA, tokenB }) => {
         TradeType.EXACT_INPUT,
       );
       const amountOutMin = trade.minimumAmountOut(slippageTolerance).toExact(); // needs to be converted to e.g. decimal string
-      const path = [tokenA.address, tokenB.address];
       const deadline = Math.floor(Date.now() / 1000) + 60 * 20; // 20 minutes from the current Unix time
+
+      if (tokenA.symbol === "CFX") {
+        const path = [tokenB.address];
+        await writeContractAsync({
+          abi: uniswapRouter02Abi,
+          address: V2_ROUTER_ADDRESSES[chainId] as `0x${string}`,
+          functionName: "swapExactETHForTokens",
+          args: [
+            convertValueToUnit(amountOutMin, tokenB.decimals),
+            path,
+            address,
+            deadline,
+          ],
+        });
+        return;
+      }
+
+      if (tokenB.symbol === "CFX") {
+        const path = [tokenA.address];
+        await writeContractAsync({
+          abi: uniswapRouter02Abi,
+          address: V2_ROUTER_ADDRESSES[chainId] as `0x${string}`,
+          functionName: "swapExactTokensForETH",
+          args: [
+            convertValueToUnit(tokenAmountA, tokenA.decimals),
+            convertValueToUnit(amountOutMin, tokenB.decimals),
+            path,
+            address,
+            deadline,
+          ],
+        });
+        return;
+      }
+
+      const path = [tokenA.address, tokenB.address];
       await writeContractAsync({
         abi: uniswapRouter02Abi,
         address: V2_ROUTER_ADDRESSES[chainId] as `0x${string}`,
@@ -220,7 +257,7 @@ export const SwapBox: FC<SwapBoxProps> = ({ tokenA, tokenB }) => {
   const slippageTolerance = new Percent("50", "100");
 
   useEffect(() => {
-    if (!isFetchingPairData && liquidity !== "0") {
+    if (!isFetchingPairData && liquidity !== "0" && Number(tokenAmountA) > 0) {
       const output = pair.getOutputAmount(
         CurrencyAmount.fromRawAmount(
           _tokenA,
@@ -360,22 +397,31 @@ export const SwapBox: FC<SwapBoxProps> = ({ tokenA, tokenB }) => {
         </div>
         <TradeDetails />
         <div className="h-px w-full bg-[#FBF1F3]"></div>
-        <SwapNowButton
-          handleSwap={handleSwap}
-          text={
-            tokenA.symbol === "CFX" && tokenB.symbol === "WCFX"
-              ? "Wrap"
-              : tokenA.symbol === "WCFX" && tokenB.symbol === "CFX"
-                ? "Unwrap"
-                : "Swap Now"
-          }
-        />
+
         {!isLoadingApproval &&
-          allAproved.includes(false) &&
-          !(tokenA.symbol === "CFX" && tokenB.symbol === "WCFX") &&
-          !(tokenA.symbol === "WCFX" && tokenB.symbol === "CFX") && (
-            <Button onClick={approveToken}>Approve</Button>
-          )}
+        allAproved.includes(false) &&
+        !(tokenA.symbol === "CFX" && tokenB.symbol === "WCFX") &&
+        !(tokenA.symbol === "WCFX" && tokenB.symbol === "CFX") ? (
+          <Button
+            className="flex h-auto items-center justify-center gap-[10px] rounded-[10px] border-0 bg-primary-200 px-14 py-[10px] text-primary-900 hover:bg-primary-400"
+            onClick={approveToken}
+          >
+            <span className="text-[16px] font-[700] leading-[19.2px]">
+              Approve
+            </span>
+          </Button>
+        ) : (
+          <SwapNowButton
+            handleSwap={handleSwap}
+            text={
+              tokenA.symbol === "CFX" && tokenB.symbol === "WCFX"
+                ? "Wrap"
+                : tokenA.symbol === "WCFX" && tokenB.symbol === "CFX"
+                  ? "Unwrap"
+                  : "Swap Now"
+            }
+          />
+        )}
       </div>
     </div>
   );

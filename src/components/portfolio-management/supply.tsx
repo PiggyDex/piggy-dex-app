@@ -109,11 +109,51 @@ export const Supply: FC<TokenBoxProps> = ({
       )
     : Big(0);
 
-  const slippageTolerance = 0.5;
+  const slippageTolerance = 1;
 
   const handleSupply = async () => {
     const amount0 = convertValueToUnit(tokensAmount[0], tokens[0].decimals);
     const amount1 = convertValueToUnit(tokensAmount[1], tokens[1].decimals);
+
+    if (tokens[0].symbol === "CFX") {
+      await writeContractAsync({
+        abi: uniswapRouter02Abi,
+        address: V2_ROUTER_ADDRESSES[chainId] as `0x${string}`,
+        functionName: "addLiquidityETH",
+        args: [
+          tokens[1].address,
+          BigInt(amount1),
+          (BigInt(amount1) * (BigInt(100) - BigInt(slippageTolerance * 100))) /
+            BigInt(100),
+          (BigInt(amount0) * (BigInt(100) - BigInt(slippageTolerance * 100))) /
+            BigInt(100),
+          address,
+          Date.now() + 1000 * 60 * 1,
+        ],
+        value: BigInt(amount0),
+      });
+      return;
+    }
+
+    if (tokens[1].symbol === "CFX") {
+      await writeContractAsync({
+        abi: uniswapRouter02Abi,
+        address: V2_ROUTER_ADDRESSES[chainId] as `0x${string}`,
+        functionName: "addLiquidityETH",
+        args: [
+          tokens[0].address,
+          BigInt(amount0),
+          (BigInt(amount0) * (BigInt(100) - BigInt(slippageTolerance * 100))) /
+            BigInt(100),
+          (BigInt(amount1) * (BigInt(100) - BigInt(slippageTolerance * 100))) /
+            BigInt(100),
+          address,
+          Date.now() + 1000 * 60 * 1,
+        ],
+        value: BigInt(amount1),
+      });
+      return;
+    }
 
     await writeContractAsync({
       abi: uniswapRouter02Abi,
@@ -122,10 +162,12 @@ export const Supply: FC<TokenBoxProps> = ({
       args: [
         tokens[0].address,
         tokens[1].address,
-        Big(amount0),
-        Big(amount1),
-        Big(amount0).mul(Big(1).sub(slippageTolerance)),
-        Big(amount1).mul(Big(1).sub(slippageTolerance)),
+        BigInt(amount0),
+        BigInt(amount1),
+        (BigInt(amount0) * (BigInt(100) - BigInt(slippageTolerance * 100))) /
+          BigInt(100),
+        (BigInt(amount1) * (BigInt(100) - BigInt(slippageTolerance * 100))) /
+          BigInt(100),
         address,
         Date.now() + 1000 * 60 * 1,
       ],
@@ -167,7 +209,7 @@ export const Supply: FC<TokenBoxProps> = ({
             Pool review
           </span>
           <div className="flex w-full flex-col items-start gap-[21px]">
-            <div className="flex flex-col items-start gap-2 self-stretch rounded-[15px] border-DEFAULT border-solid border-[#E1A1B1] bg-[#FBF1F3] px-4	py-3">
+            {/* <div className="flex flex-col items-start gap-2 self-stretch rounded-[15px] border-DEFAULT border-solid border-[#E1A1B1] bg-[#FBF1F3] px-4	py-3">
               <div className="flex items-center gap-1 self-stretch">
                 <Image
                   src="/warning.svg"
@@ -184,9 +226,8 @@ export const Supply: FC<TokenBoxProps> = ({
                 Once you are happy with the rate, click Supply button to reiew
                 the information.
               </span>
-            </div>
+            </div> */}
             <div className="flex w-full flex-col items-start gap-3 self-stretch text-[16px] font-[400] leading-[19.2px] text-[#272727]">
-              <Item name="APR" value="0.3%" />
               <div className="h-px bg-[#FBF1F3]"></div>
               <Item
                 name="Pool Share"
@@ -200,7 +241,10 @@ export const Supply: FC<TokenBoxProps> = ({
                 value={`${formatSplitDigit(Big(liquidityMinted).add(liquidity ? liquidity : Big(0)), 18)} (AOT - MEGG) LP`}
               />
               <div className="h-px bg-[#FBF1F3]"></div>
-              <Item name="Slippage Tolerance" value={`${slippageTolerance}%`} />
+              <Item
+                name="Slippage Tolerance"
+                value={`${slippageTolerance * 100}%`}
+              />
               <div className="h-px bg-[#FBF1F3]"></div>
               <Item name="Created By" value="You" />
               <div className="h-px bg-[#FBF1F3]"></div>
@@ -220,6 +264,7 @@ export const Supply: FC<TokenBoxProps> = ({
                 className={cn(
                   "flex h-auto items-end gap-2 self-end rounded-[10px] bg-[#EFEFEF] px-9 py-2 text-[16px] font-[700] text-[#414141]",
                   isPending ? "loader" : "",
+                  tokens[index].symbol === "CFX" ? "hidden" : "",
                 )}
                 onClick={async () => {
                   await writeContractAsync(

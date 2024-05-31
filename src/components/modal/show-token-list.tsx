@@ -1,6 +1,7 @@
 import Image from "next/image";
 import { type FC, useEffect } from "react";
 
+import { GetTokenBalance } from "@/lib";
 import { type TokenInterface } from "@/types";
 
 type ShowTokenInterface = {
@@ -25,7 +26,7 @@ export const ShowTokenList: FC<ShowTokenInterface> = ({
   return (
     <div className="flex max-h-[60vh] flex-[1_0_0%] flex-col items-start gap-6 overflow-y-scroll pr-3">
       {tokenList.map((token, index) => {
-        const displayBlance = 0;
+        const displayBlance = GetTokenBalance(token);
         // parseInt(token.balance) / 10 ** parseInt(token.decimals);
         return (
           <div
