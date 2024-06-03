@@ -1,17 +1,18 @@
 import Image from "next/image";
 import { type FC, useEffect } from "react";
 
-import { type TokenListProps } from ".";
+import { GetTokenBalance } from "@/lib";
+import { type TokenInterface } from "@/types";
 
-type ShowTokenListProps = {
+type ShowTokenInterface = {
   maxSelect: number;
-  tokenList: TokenListProps[];
-  usingTokens: TokenListProps[];
-  setUsingTokens: (newUsingTokens: TokenListProps[]) => void;
-  updateTokenList: (newTokenList: TokenListProps[]) => void;
+  tokenList: TokenInterface[];
+  usingTokens: TokenInterface[];
+  setUsingTokens: (newUsingTokens: TokenInterface[]) => void;
+  updateTokenList: (newTokenList: TokenInterface[]) => void;
 };
 
-export const ShowTokenList: FC<ShowTokenListProps> = ({
+export const ShowTokenList: FC<ShowTokenInterface> = ({
   maxSelect,
   tokenList,
   usingTokens,
@@ -25,8 +26,8 @@ export const ShowTokenList: FC<ShowTokenListProps> = ({
   return (
     <div className="flex max-h-[60vh] flex-[1_0_0%] flex-col items-start gap-6 overflow-y-scroll pr-3">
       {tokenList.map((token, index) => {
-        const displayBlance =
-          parseInt(token.balance) / 10 ** parseInt(token.decimals);
+        const displayBlance = GetTokenBalance(token);
+        // parseInt(token.balance) / 10 ** parseInt(token.decimals);
         return (
           <div
             key={index}

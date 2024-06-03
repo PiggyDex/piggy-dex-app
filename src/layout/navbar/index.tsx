@@ -53,6 +53,9 @@ export const Navbar: FC = () => {
     "[&_.ant-menu-item-selected]:!bg-primary-900 [&_.ant-menu-item-selected]:!text-primary-400";
 
   const handleItemClick = ({ key }: { key: string }) => {
+    if (key === pathname) return;
+    //remove after implement the pages
+    if (key !== PATH.PORTFOLIO && key !== PATH.SWAP) return;
     router.push(key);
   };
 

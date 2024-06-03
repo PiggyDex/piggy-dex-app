@@ -1,134 +1,35 @@
 "use client";
 
 import { useModal } from "@ebay/nice-modal-react";
-import { Button, type InputNumberProps } from "antd";
+import { Alert, Button, type InputNumberProps } from "antd";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { type FC, useState } from "react";
+import { useAccount, useChainId } from "wagmi";
 
 import {
   type PortfolioManagementProps,
   SelectTokenModal,
-  TokenBox,
-  type TokenBoxProps,
-  type TokenListProps,
-  tokenList,
+  Supply,
 } from "@/components";
 import { Page } from "@/constants";
+import { useGetTokenBalance, useTokenList } from "@/hooks";
+import { type TokenInterface } from "@/types";
 
-type ItemProps = {
-  name: string;
-  value: string;
-};
-
-const Item: FC<ItemProps> = ({ name, value }) => {
-  return (
-    <div className="flex w-full items-start self-stretch">
-      <div className="flex w-full items-center gap-1">
-        <span>{name}</span>
-        <Image
-          src="/small-warning.svg"
-          alt="small-warning"
-          width={16}
-          height={16}
-          className="shrink-0"
-        />
-      </div>
-      <span className="mr-1 flex-none">{value}</span>
-    </div>
-  );
-};
-
-export const Supply: FC<TokenBoxProps> = ({
-  tokens,
-  tokensAmount,
-  accountBalances,
-  handleInputChange,
-  showModal,
-}) => {
-  return (
-    <div className="flex flex-col items-center gap-8 self-stretch rounded-[15px] bg-white px-6 py-8">
-      <div className="flex items-start justify-center gap-8 self-stretch">
-        <div className="flex-0 flex w-full flex-col gap-8">
-          <span className="w-full self-stretch text-[16px] font-[700] leading-[19.2px] text-[#414141]">
-            Token pair
-          </span>
-          <TokenBox
-            tokens={[tokens[0]]}
-            tokensAmount={[tokensAmount[0].toString()]}
-            accountBalances={[accountBalances[0]]}
-            handleInputChange={
-              handleInputChange && handleInputChange[0]
-                ? [handleInputChange[0]]
-                : undefined
-            }
-            showModal={[showModal[0]]}
-          />
-          <TokenBox
-            tokens={[tokens[1]]}
-            tokensAmount={[tokensAmount[1].toString()]}
-            accountBalances={[accountBalances[1]]}
-            handleInputChange={
-              handleInputChange && handleInputChange[1]
-                ? [handleInputChange[1]]
-                : undefined
-            }
-            showModal={[showModal[1]]}
-          />
-        </div>
-        <div className="flex w-full flex-col items-start gap-8">
-          <span className="w-full self-stretch text-[16px] font-[700] leading-[19.2px] text-[#414141]">
-            Pool review
-          </span>
-          <div className="flex w-full flex-col items-start gap-[21px]">
-            <div className="flex flex-col items-start gap-2 self-stretch rounded-[15px] border-DEFAULT border-solid border-[#E1A1B1] bg-[#FBF1F3] px-4	py-3">
-              <div className="flex items-center gap-1 self-stretch">
-                <Image
-                  src="/warning.svg"
-                  alt="warning"
-                  width={24}
-                  height={24}
-                />
-                <span className="w-full text-[16px] font-[400] leading-[19.2px] text-[#5C5C5C]">
-                  You are the first liquidity provider
-                </span>
-              </div>
-              <span className="w-full text-[12px] font-[400] leading-[14.4px] text-[#5C5C5C]">
-                The ratio of tokens you add will set the price of this pair.
-                Once you are happy with the rate, click Supply button to reiew
-                the information.
-              </span>
-            </div>
-            <div className="flex w-full flex-col items-start gap-3 self-stretch text-[16px] font-[400] leading-[19.2px] text-[#272727]">
-              <Item name="APR" value="0.5%" />
-              <div className="h-px bg-[#FBF1F3]"></div>
-              <Item name="Pool Share" value="100%" />
-              <div className="h-px bg-[#FBF1F3]"></div>
-              <Item name="Rate" value="1 AOT = 0 MEGG" />
-              <div className="h-px bg-[#FBF1F3]"></div>
-              <Item name="Total Pool Supply" value="0 AOT - MEGG LP" />
-              <div className="h-px bg-[#FBF1F3]"></div>
-              <Item name="Slippage Tolerance" value="0.5%" />
-              <div className="h-px bg-[#FBF1F3]"></div>
-              <Item name="Created By" value="You" />
-              <div className="h-px bg-[#FBF1F3]"></div>
-              <Item name="Created At" value="2024/04/08" />
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-};
+import "./loader-text.css";
 
 type ChoosePairProps = {
-  tokens: TokenListProps[];
-  setTokens: (tokens: TokenListProps[]) => void;
+  tokens: TokenInterface[];
+  setTokens: (tokens: TokenInterface[]) => void;
+  tokenList: TokenInterface[];
 };
 
-export const ChoosePair: FC<ChoosePairProps> = ({ tokens, setTokens }) => {
+export const ChoosePair: FC<ChoosePairProps> = ({
+  tokens,
+  setTokens,
+  tokenList,
+}) => {
   const modal = useModal(SelectTokenModal);
-
   const showModal = () => {
     modal.show({
       usingTokens: tokens,
@@ -137,6 +38,7 @@ export const ChoosePair: FC<ChoosePairProps> = ({ tokens, setTokens }) => {
       maxSelect: 2,
       onlyShowAllTokens: false,
       showPageAfterSelect: Page.Supply,
+      tokenList,
     });
   };
 
@@ -171,24 +73,29 @@ export const AddLiquidty: FC<PortfolioManagementProps> = ({
 }) => {
   const modal = useModal(SelectTokenModal);
   const router = useRouter();
+  const { status } = useAccount();
 
+  const chainId = useChainId();
+  const { tokenList } = useTokenList(chainId);
   const showModalA = () => {
     modal.show({
       usingTokens: usingTokenA,
-      setUsingTokens: setUsingTokenA,
+      setUsingTokens: _setUsingTokenA,
       title: "Select Token",
       maxSelect: 1,
       onlyShowAllTokens: false,
+      tokenList,
     });
   };
 
   const showModalB = () => {
     modal.show({
       usingTokens: usingTokenB,
-      setUsingTokens: setUsingTokenB,
+      setUsingTokens: _setUsingTokenB,
       title: "Select Token",
       maxSelect: 1,
       onlyShowAllTokens: false,
+      tokenList,
     });
   };
 
@@ -197,14 +104,30 @@ export const AddLiquidty: FC<PortfolioManagementProps> = ({
 
   // 0 is token A
   // 1 is token B
-  const [usingTokenA, setUsingTokenA] = useState<TokenListProps[]>([
+  const [usingTokenA, setUsingTokenA] = useState<TokenInterface[]>([
     tokenA || tokenList[0],
   ]);
-  const [usingTokenB, setUsingTokenB] = useState<TokenListProps[]>([
+  const [usingTokenB, setUsingTokenB] = useState<TokenInterface[]>([
     tokenB || tokenList[1],
   ]);
 
-  const [usingTokens, setUsingTokens] = useState<TokenListProps[]>([
+  const _setUsingTokenA = (newUsingTokenA: TokenInterface[]) => {
+    if (newUsingTokenA[0].address === usingTokenB[0].address) return;
+    setUsingTokenA(newUsingTokenA);
+    router.push(
+      `/portfolio/add/supply?tokenA=${newUsingTokenA[0].address}&tokenB=${usingTokenB[0].address}`,
+    );
+  };
+
+  const _setUsingTokenB = (newUsingTokenB: TokenInterface[]) => {
+    if (newUsingTokenB[0].address === usingTokenA[0].address) return;
+    setUsingTokenB(newUsingTokenB);
+    router.push(
+      `/portfolio/add/supply?tokenA=${usingTokenA[0].address}&tokenB=${newUsingTokenB[0].address}`,
+    );
+  };
+
+  const [usingTokens, setUsingTokens] = useState<TokenInterface[]>([
     usingTokenA[0],
     usingTokenB[0],
   ]);
@@ -216,6 +139,23 @@ export const AddLiquidty: FC<PortfolioManagementProps> = ({
   const handleTokenAmountBChange: InputNumberProps["onChange"] = (value) => {
     setTokenAmountB(parseFloat(value as string).toString());
   };
+
+  const tokenABalance = useGetTokenBalance(tokenA || usingTokenA[0]);
+  const tokenBBalance = useGetTokenBalance(tokenB || usingTokenB[0]);
+
+  if (status === "connecting" || status === "reconnecting") {
+    return <></>;
+  }
+
+  if (status === "disconnected") {
+    return (
+      <Alert
+        message="Please connect your wallet first."
+        description="Click on Connect Wallet Button in the top right of the screen to connect your wallet."
+        type="error"
+      />
+    );
+  }
 
   return (
     <div className="flex flex-col gap-6">
@@ -277,13 +217,17 @@ export const AddLiquidty: FC<PortfolioManagementProps> = ({
       </div>
 
       {(showPage & Page.ChoosePair) > 0 && (
-        <ChoosePair tokens={usingTokens} setTokens={setUsingTokens} />
+        <ChoosePair
+          tokens={usingTokens}
+          setTokens={setUsingTokens}
+          tokenList={tokenList}
+        />
       )}
       {(showPage && Page.Supply) > 0 && tokenA && tokenB && (
         <Supply
           tokens={[usingTokenA[0], usingTokenB[0]]}
           tokensAmount={[tokenAmountA, tokenAmountB]}
-          accountBalances={[100, 100]}
+          accountBalances={[tokenABalance.toString(), tokenBBalance.toString()]}
           handleInputChange={[
             handleTokenAmountAChange,
             handleTokenAmountBChange,

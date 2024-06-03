@@ -1,7 +1,11 @@
-import { redirect } from "next/navigation";
+"use client";
 
-import { PortfolioManagement, tokenList } from "@/components";
+import { redirect } from "next/navigation";
+import { useChainId } from "wagmi";
+
+import { PortfolioManagement } from "@/components";
 import { Page } from "@/constants";
+import { useTokenList } from "@/hooks";
 
 export default function Portfolio({
   // params,
@@ -16,6 +20,8 @@ export default function Portfolio({
   if (tokenA === undefined || tokenB === undefined) {
     redirect("/portfolio/add/");
   }
+  const chainId = useChainId();
+  const { tokenList } = useTokenList(chainId);
 
   const _tokenA = tokenList.find(
     (token) => token.address.toLowerCase() === tokenA.toLowerCase(),
