@@ -1,15 +1,15 @@
 import { useAtom } from "jotai";
-import Image from "next/image";
 
+import AnalyticsIcon from "@/assets/navbar-icon/analytics.svg";
+import BridgeIcon from "@/assets/navbar-icon/bridge.svg";
+import EarnIcon from "@/assets/navbar-icon/earn.svg";
+import PortfolioIcon from "@/assets/navbar-icon/portfolio.svg";
+import SwapIcon from "@/assets/navbar-icon/swap.svg";
 import { navbarCollapsedAtom } from "@/atoms";
 import { PATH } from "@/constants";
 import { cn } from "@/lib";
 
-type NavbarItemsProps = {
-  pathname: string;
-};
-
-export const NavbarItems = ({ pathname }: NavbarItemsProps) => {
+export const NavbarItems = () => {
   const [collapsed] = useAtom(navbarCollapsedAtom);
 
   const MenuItemSpanClassName =
@@ -19,72 +19,35 @@ export const NavbarItems = ({ pathname }: NavbarItemsProps) => {
   return [
     {
       key: PATH.PORTFOLIO,
-      icon: (
-        <Image
-          className="flex-none"
-          src={`/navbar-icon${PATH.PORTFOLIO}${pathname === PATH.PORTFOLIO ? "-active" : ""}.svg`}
-          alt="logo"
-          width={24}
-          height={24}
-        />
-      ),
+      icon: <PortfolioIcon className="h-6 w-6 flex-none" />,
       label: (
         <span className={cn(MenuItemSpanClassName, hidden)}>Portfolio</span>
       ),
     },
     {
       key: PATH.SWAP,
-      icon: (
-        <Image
-          className="flex-none"
-          src={`/navbar-icon${PATH.SWAP}${pathname === PATH.SWAP ? "-active" : ""}.svg`}
-          alt="logo"
-          width={24}
-          height={24}
-        />
-      ),
+      icon: <SwapIcon className="h-6 w-6 flex-none" />,
       label: <span className={cn(MenuItemSpanClassName, hidden)}>Swap</span>,
     },
     {
       key: PATH.EARN,
-      icon: (
-        <Image
-          className="flex-none"
-          src={`/navbar-icon${PATH.EARN}${pathname === PATH.EARN ? "-active" : ""}.svg`}
-          alt="logo"
-          width={24}
-          height={24}
-        />
-      ),
+      icon: <EarnIcon className="h-6 w-6 flex-none" />,
       label: <span className={cn(MenuItemSpanClassName, hidden)}>Earn</span>,
+      disabled: true,
     },
     {
       key: PATH.ANALYTICS,
-      icon: (
-        <Image
-          className="flex-none"
-          src={`/navbar-icon${PATH.ANALYTICS}${pathname === PATH.ANALYTICS ? "-active" : ""}.svg`}
-          alt="logo"
-          width={24}
-          height={24}
-        />
-      ),
+      icon: <AnalyticsIcon className="h-6 w-6 flex-none" />,
       label: (
         <span className={cn(MenuItemSpanClassName, hidden)}>Analytics</span>
       ),
+      disabled: true,
     },
     {
       key: PATH.BRIDGE,
-      icon: (
-        <Image
-          className="flex-none"
-          src={`/navbar-icon${PATH.BRIDGE}${pathname === PATH.BRIDGE ? "-active" : ""}.svg`}
-          alt="logo"
-          width={24}
-          height={24}
-        />
-      ),
+      icon: <BridgeIcon className="h-6 w-6 flex-none" />,
       label: <span className={cn(MenuItemSpanClassName, hidden)}>Bridge</span>,
+      disabled: true,
     },
   ];
 };

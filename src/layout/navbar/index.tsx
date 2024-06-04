@@ -4,7 +4,7 @@ import { Menu } from "antd";
 import { useAtom } from "jotai";
 import Image from "next/image";
 import { usePathname, useRouter } from "next/navigation";
-import { type FC, useEffect } from "react";
+import { type FC, useLayoutEffect } from "react";
 
 import ArrowHeadIcon from "@/assets/arrow-head-right-pink.svg";
 import LogoutIcon from "@/assets/logout.svg";
@@ -33,7 +33,7 @@ export const Navbar: FC = () => {
     ? "transition-all duration-300"
     : "transition-all duration-150";
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     setTimeout(
       () => {
         setBorder("");
@@ -54,8 +54,6 @@ export const Navbar: FC = () => {
 
   const handleItemClick = ({ key }: { key: string }) => {
     if (key === pathname) return;
-    //remove after implement the pages
-    if (key !== PATH.PORTFOLIO && key !== PATH.SWAP) return;
     router.push(key);
   };
 
@@ -117,7 +115,7 @@ export const Navbar: FC = () => {
           mode="inline"
           defaultSelectedKeys={[pathname || PATH.PORTFOLIO]}
           inlineCollapsed={collapsed}
-          items={NavbarItems({ pathname })}
+          items={NavbarItems()}
           onClick={handleItemClick}
         />
       </div>
