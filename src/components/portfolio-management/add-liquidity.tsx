@@ -2,6 +2,7 @@
 
 import { useModal } from "@ebay/nice-modal-react";
 import { Alert, Button, type InputNumberProps } from "antd";
+import Big from "big.js";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { type FC, useState } from "react";
@@ -13,7 +14,7 @@ import {
   Supply,
 } from "@/components";
 import { Page } from "@/constants";
-import { useGetTokenBalance, useTokenList } from "@/hooks";
+import { useFetchingPairData, useGetTokenBalance, useTokenList } from "@/hooks";
 import { type TokenInterface } from "@/types";
 
 import "./loader-text.css";
@@ -77,6 +78,12 @@ export const AddLiquidty: FC<PortfolioManagementProps> = ({
 
   const chainId = useChainId();
   const { tokenList } = useTokenList(chainId);
+
+  const { pair, liquidity } = useFetchingPairData(
+    tokenA || tokenList[1],
+    tokenB || tokenList[2],
+  );
+
   const showModalA = () => {
     modal.show({
       usingTokens: usingTokenA,
@@ -99,8 +106,8 @@ export const AddLiquidty: FC<PortfolioManagementProps> = ({
     });
   };
 
-  const [tokenAmountA, setTokenAmountA] = useState<string>("1");
-  const [tokenAmountB, setTokenAmountB] = useState<string>("1");
+  const [tokenAmountA, setTokenAmountA] = useState<string>("0");
+  const [tokenAmountB, setTokenAmountB] = useState<string>("0");
 
   // 0 is token A
   // 1 is token B
@@ -133,11 +140,23 @@ export const AddLiquidty: FC<PortfolioManagementProps> = ({
   ]);
 
   const handleTokenAmountAChange: InputNumberProps["onChange"] = (value) => {
-    setTokenAmountA(parseFloat(value as string).toString());
+    const newAmountTokenA = parseFloat(value as string).toString();
+    setTokenAmountA(newAmountTokenA);
+    if (liquidity) {
+      const token0Price = pair.token0Price;
+      const newAmountTokenB = Big(token0Price.toFixed()).mul(newAmountTokenA);
+      setTokenAmountB(newAmountTokenB.toFixed());
+    }
   };
 
   const handleTokenAmountBChange: InputNumberProps["onChange"] = (value) => {
+    const newAmountTokenB = parseFloat(value as string).toString();
     setTokenAmountB(parseFloat(value as string).toString());
+    if (liquidity) {
+      const token1Price = pair.token1Price;
+      const newAmountTokenA = Big(token1Price.toFixed()).mul(newAmountTokenB);
+      setTokenAmountA(newAmountTokenA.toFixed());
+    }
   };
 
   const tokenABalance = useGetTokenBalance(tokenA || usingTokenA[0]);

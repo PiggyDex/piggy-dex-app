@@ -19,7 +19,11 @@ import {
 } from "wagmi";
 
 import { TokenBox, type TokenBoxProps } from "@/components";
-import { useCheckTokenApproval, useFetchingPairData } from "@/hooks";
+import {
+  useCheckTokenApproval,
+  useFetchingPairData,
+  useWrappedCFX,
+} from "@/hooks";
 import {
   calculatePercent,
   cn,
@@ -64,6 +68,7 @@ export const Supply: FC<TokenBoxProps> = ({
   showModal,
 }) => {
   const { pair, liquidity } = useFetchingPairData(tokens[0], tokens[1]);
+
   const [isLoadingApproval, allAproved] = useCheckTokenApproval(
     tokens,
     tokensAmount,
@@ -77,16 +82,18 @@ export const Supply: FC<TokenBoxProps> = ({
 
   const chainId = useChainId();
 
+  const { WCFX } = useWrappedCFX(chainId);
+
   const { address } = useAccount();
 
   const tokenA: Token = new Token(
     chainId,
-    tokens[0].address,
+    tokens[0].symbol === "CFX" ? WCFX.address : tokens[0].address,
     tokens[0].decimals,
   );
   const tokenB: Token = new Token(
     chainId,
-    tokens[1].address,
+    tokens[1].symbol === "CFX" ? WCFX.address : tokens[1].address,
     tokens[1].decimals,
   );
   const currencyAmountA = CurrencyAmount.fromRawAmount(
@@ -97,17 +104,20 @@ export const Supply: FC<TokenBoxProps> = ({
     tokenB,
     Big(tokensAmount[1]).mul(Big(10).pow(tokenB.decimals)).toFixed(),
   );
-  const liquidityMinted: Big = liquidity
-    ? new Big(
-        pair
-          .getLiquidityMinted(
-            CurrencyAmount.fromRawAmount(pair.liquidityToken, liquidity),
-            currencyAmountA,
-            currencyAmountB,
-          )
-          .quotient.toString(),
-      )
-    : Big(0);
+  const liquidityMinted: Big =
+    liquidity &&
+    currencyAmountA.greaterThan("0") &&
+    currencyAmountB.greaterThan("0")
+      ? new Big(
+          pair
+            .getLiquidityMinted(
+              CurrencyAmount.fromRawAmount(pair.liquidityToken, liquidity),
+              currencyAmountA,
+              currencyAmountB,
+            )
+            .quotient.toString(),
+        )
+      : Big(0);
 
   const slippageTolerance = 1;
 
@@ -174,6 +184,12 @@ export const Supply: FC<TokenBoxProps> = ({
     });
   };
 
+  const checkAllApproved = (): boolean => {
+    if (tokens[0].symbol !== "CFX" && allAproved[0] === false) return false;
+    if (tokens[1].symbol !== "CFX" && allAproved[1] === false) return false;
+    return true;
+  };
+
   return (
     <div className="flex flex-col items-center gap-8 self-stretch rounded-[15px] bg-white px-6 py-8">
       <div className="flex items-start justify-center gap-8 self-stretch">
@@ -209,36 +225,41 @@ export const Supply: FC<TokenBoxProps> = ({
             Pool review
           </span>
           <div className="flex w-full flex-col items-start gap-[21px]">
-            {/* <div className="flex flex-col items-start gap-2 self-stretch rounded-[15px] border-DEFAULT border-solid border-[#E1A1B1] bg-[#FBF1F3] px-4	py-3">
-              <div className="flex items-center gap-1 self-stretch">
-                <Image
-                  src="/warning.svg"
-                  alt="warning"
-                  width={24}
-                  height={24}
-                />
-                <span className="w-full text-[16px] font-[400] leading-[19.2px] text-[#5C5C5C]">
-                  You are the first liquidity provider
+            {!liquidity && (
+              <div className="flex flex-col items-start gap-2 self-stretch rounded-[15px] border-DEFAULT border-solid border-[#E1A1B1] bg-[#FBF1F3] px-4	py-3">
+                <div className="flex items-center gap-1 self-stretch">
+                  <Image
+                    src="/warning.svg"
+                    alt="warning"
+                    width={24}
+                    height={24}
+                  />
+                  <span className="w-full text-[16px] font-[400] leading-[19.2px] text-[#5C5C5C]">
+                    You are the first liquidity provider
+                  </span>
+                </div>
+                <span className="w-full text-[12px] font-[400] leading-[14.4px] text-[#5C5C5C]">
+                  The ratio of tokens you add will set the price of this pair.
+                  Once you are happy with the rate, click Supply button to reiew
+                  the information.
                 </span>
               </div>
-              <span className="w-full text-[12px] font-[400] leading-[14.4px] text-[#5C5C5C]">
-                The ratio of tokens you add will set the price of this pair.
-                Once you are happy with the rate, click Supply button to reiew
-                the information.
-              </span>
-            </div> */}
+            )}
             <div className="flex w-full flex-col items-start gap-3 self-stretch text-[16px] font-[400] leading-[19.2px] text-[#272727]">
               <div className="h-px bg-[#FBF1F3]"></div>
               <Item
                 name="Pool Share"
-                value={`${liquidity ? formatPercentage(calculatePercent(liquidityMinted, liquidity)) : 0} %`}
+                value={`${liquidity && liquidityMinted.gt("0") ? formatPercentage(calculatePercent(liquidityMinted, liquidity)) : 0} %`}
               />
               <div className="h-px bg-[#FBF1F3]"></div>
-              <Item name="Rate" value="1 AOT = 0 MEGG" />
+              <Item
+                name="Rate"
+                value={`1 ${tokens[0].symbol} = ${liquidity !== "0" ? pair.token0Price.toFixed() : "undefined"} ${tokens[1].symbol}`}
+              />
               <div className="h-px bg-[#FBF1F3]"></div>
               <Item
                 name="Total Pool Supply"
-                value={`${formatSplitDigit(Big(liquidityMinted).add(liquidity ? liquidity : Big(0)), 18)} (AOT - MEGG) LP`}
+                value={`${formatSplitDigit(liquidity ? liquidity : Big(0), 18)} (${tokens[0].symbol} - ${tokens[1].symbol}) LP`}
               />
               <div className="h-px bg-[#FBF1F3]"></div>
               <Item
@@ -301,9 +322,7 @@ export const Supply: FC<TokenBoxProps> = ({
           })}
         </div>
       )}
-      {allAproved.every((value) => {
-        return value === true;
-      }) && (
+      {checkAllApproved() && (
         <Button
           type="primary"
           className="flex	h-auto items-end	gap-2 self-end rounded-[10px] bg-[#EFEFEF] px-9 py-2 text-[16px] font-[700] text-[#414141]"

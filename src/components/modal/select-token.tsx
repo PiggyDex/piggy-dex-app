@@ -15,7 +15,7 @@ type TabNameProps = {
   name: string;
 };
 
-const TabName: FC<TabNameProps> = ({ name }) => {
+export const TabName: FC<TabNameProps> = ({ name }) => {
   return (
     <div className="flex items-center gap-[10px] text-[16px] font-[400] leading-[19.2px] tracking-[0.4px] text-[#BF697E]">
       {name}
