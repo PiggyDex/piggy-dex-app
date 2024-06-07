@@ -42,7 +42,7 @@ export const ShowTokenList: FC<ShowTokenInterface> = ({
               }
             }}
           >
-            <Image src="/ethereum-eth.svg" alt="eth" width={25} height={25} />
+            <Image src={token.logoURI} alt="eth" width={25} height={25} />
             <div className="flex flex-[1_0_0%] flex-col items-start justify-center gap-1">
               <div className="text-[16px] font-[400] leading-[19.2px]">
                 {token.symbol}

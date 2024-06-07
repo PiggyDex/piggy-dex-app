@@ -4,10 +4,10 @@ import UniswapV2Pair from "@piggy-dex/v2-contracts/out/UniswapV2Pair.sol/Uniswap
 import { readContract } from "@wagmi/core";
 import { Button, Table, Tabs, type TabsProps } from "antd";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 import { type FC, useEffect, useMemo, useState } from "react";
 import { useAccount } from "wagmi";
 
-import AddLiquiditySvg from "@/assets/add-liquidity.svg";
 import { TabName } from "@/components";
 import { useFetchPools, useFetchingPoolTokensFromAddresses } from "@/hooks";
 import { type TokenInterface } from "@/types";
@@ -160,11 +160,16 @@ export const TableMyPosition: FC = () => {
     return createDataSource(ownPool, ownTokensA, ownTokensB);
   }, [ownPool, ownTokensA, ownTokensB]);
 
-  if (tokensA.length && tokensB.length) {
-    return <Table size="large" dataSource={dataSource} columns={columns} />;
-  }
-
-  return <Empty />;
+  return (
+    <Table
+      size="large"
+      dataSource={dataSource}
+      columns={columns}
+      locale={{
+        emptyText: <Empty />,
+      }}
+    />
+  );
 };
 
 export const Management: FC = () => {
@@ -182,6 +187,7 @@ export const Management: FC = () => {
   ];
 
   const { address } = useAccount();
+  const router = useRouter();
 
   if (!address) {
     return <></>;
@@ -208,12 +214,13 @@ export const Management: FC = () => {
                   height={24}
                 />
               </Button>
-              <Button className="border-1 flex h-auto items-center justify-center gap-[10px] rounded-[10px] border-solid border-[#D2738B] px-6 py-[10px] text-[14px] text-[#D2738B] text-[700]">
-                Create Pool
-                <AddLiquiditySvg color="white"></AddLiquiditySvg>
-              </Button>
-              <Button className="border-1 flex h-auto items-center justify-center gap-[10px] rounded-[10px] border-solid border-[#D2738B] bg-[#E1A1B1] px-6 py-[10px] text-[14px] text-[#D2738B] text-[700]">
-                Add Liquidity
+              <Button
+                className="border-1 flex h-auto items-center justify-center gap-[10px] rounded-[10px] border-solid border-[#D2738B] bg-[#E1A1B1] px-6 py-[10px] text-[14px] text-[#D2738B] text-[700]"
+                onClick={() => {
+                  router.push("/portfolio/add");
+                }}
+              >
+                Add Liquidity / Create Pool
               </Button>
             </div>
           }
