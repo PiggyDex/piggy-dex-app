@@ -18,7 +18,7 @@ export const useFetchingPairData = (
   tokenA: TokenInterface,
   tokenB: TokenInterface,
 ): {
-  pair: Pair;
+  pair: Pair | undefined;
   liquidity: string;
   isFetchingPairData: boolean;
   _tokenA: Token;
@@ -30,26 +30,7 @@ export const useFetchingPairData = (
 
   const { WCFX } = useWrappedCFX(chainId);
 
-  const [pair, setPair] = useState<Pair>(
-    new Pair(
-      CurrencyAmount.fromRawAmount(
-        new Token(
-          chainId,
-          tokenA.symbol === "CFX" ? WCFX.address : tokenA.address,
-          tokenA.decimals,
-        ),
-        "0",
-      ),
-      CurrencyAmount.fromRawAmount(
-        new Token(
-          chainId,
-          tokenB.symbol === "CFX" ? WCFX.address : tokenB.address,
-          tokenB.decimals,
-        ),
-        "0",
-      ),
-    ),
-  );
+  const [pair, setPair] = useState<Pair | undefined>(undefined);
   const [liquidity, setLiquidity] = useState<string>("0");
 
   const _tokenA = useMemo(
@@ -104,10 +85,13 @@ export const useFetchingPairData = (
     };
     fetchPairData().then((value) => {
       const [reserve0, reserve1, liquidity] = value;
-      const pairCreated: Pair = new Pair(
-        CurrencyAmount.fromRawAmount(_tokenA, reserve0),
-        CurrencyAmount.fromRawAmount(_tokenB, reserve1),
-      );
+      let pairCreated: Pair | undefined = undefined;
+      if (_tokenA.address.toLowerCase() !== _tokenB.address.toLowerCase()) {
+        pairCreated = new Pair(
+          CurrencyAmount.fromRawAmount(_tokenA, reserve0),
+          CurrencyAmount.fromRawAmount(_tokenB, reserve1),
+        );
+      }
       setPair(pairCreated);
       setLiquidity(liquidity);
       setIsFetchingPairData(false);

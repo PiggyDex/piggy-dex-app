@@ -96,6 +96,7 @@ export const Supply: FC<TokenBoxProps> = ({
     tokens[1].symbol === "CFX" ? WCFX.address : tokens[1].address,
     tokens[1].decimals,
   );
+
   const currencyAmountA = CurrencyAmount.fromRawAmount(
     tokenA,
     Big(tokensAmount[0]).mul(Big(10).pow(tokenA.decimals)).toFixed(),
@@ -105,6 +106,7 @@ export const Supply: FC<TokenBoxProps> = ({
     Big(tokensAmount[1]).mul(Big(10).pow(tokenB.decimals)).toFixed(),
   );
   const liquidityMinted: Big =
+    pair &&
     liquidity &&
     currencyAmountA.greaterThan("0") &&
     currencyAmountB.greaterThan("0")
@@ -254,7 +256,7 @@ export const Supply: FC<TokenBoxProps> = ({
               <div className="h-px bg-[#FBF1F3]"></div>
               <Item
                 name="Rate"
-                value={`1 ${tokens[0].symbol} = ${liquidity !== "0" ? pair.token0Price.toFixed() : "undefined"} ${tokens[1].symbol}`}
+                value={`1 ${tokens[0].symbol} = ${liquidity !== "0" && pair ? pair.token0Price.toFixed() : "undefined"} ${tokens[1].symbol}`}
               />
               <div className="h-px bg-[#FBF1F3]"></div>
               <Item

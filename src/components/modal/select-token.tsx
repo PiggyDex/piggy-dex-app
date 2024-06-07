@@ -185,12 +185,7 @@ export const SelectTokenModal = NiceModal.create(
                   key={index}
                   className="flex items-center justify-center gap-1 rounded-[10px] border border-solid border-[#929292] px-2 py-1"
                 >
-                  <Image
-                    src="/ethereum-eth.svg"
-                    alt="eth"
-                    width={24}
-                    height={24}
-                  />
+                  <Image src={token.logoURI} alt="eth" width={24} height={24} />
                   <div className="text-[12px] font-[400] leading-[14.4px]">
                     {token.symbol}
                   </div>

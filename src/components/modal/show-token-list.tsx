@@ -38,6 +38,9 @@ export const ShowTokenList: FC<ShowTokenInterface> = ({
               } else {
                 if (usingTokens.length < maxSelect) {
                   setUsingTokens([...usingTokens, token]);
+                } else {
+                  // replay usingToken 0
+                  setUsingTokens([...usingTokens.slice(1), token]);
                 }
               }
             }}

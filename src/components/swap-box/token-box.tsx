@@ -47,6 +47,7 @@ export const TokenBox: FC<TokenBoxProps> = ({
           max={convertUnitToValue(accountBalances[0], tokens[0].decimals)}
           stringMode
           disabled={!handleInputChange}
+          min="0"
         />
       </div>
       <div className="text-[16px] font-[400] leading-[19.2px] text-[#5C5C5C]">

@@ -140,9 +140,10 @@ export const AddLiquidty: FC<PortfolioManagementProps> = ({
   ]);
 
   const handleTokenAmountAChange: InputNumberProps["onChange"] = (value) => {
-    const newAmountTokenA = parseFloat(value as string).toString();
+    let newAmountTokenA = parseFloat(value as string).toString();
+    if (newAmountTokenA === "NaN") newAmountTokenA = "0";
     setTokenAmountA(newAmountTokenA);
-    if (liquidity) {
+    if (liquidity && pair) {
       const token0Price = pair.token0Price;
       const newAmountTokenB = Big(token0Price.toFixed()).mul(newAmountTokenA);
       setTokenAmountB(newAmountTokenB.toFixed());
@@ -150,9 +151,10 @@ export const AddLiquidty: FC<PortfolioManagementProps> = ({
   };
 
   const handleTokenAmountBChange: InputNumberProps["onChange"] = (value) => {
-    const newAmountTokenB = parseFloat(value as string).toString();
-    setTokenAmountB(parseFloat(value as string).toString());
-    if (liquidity) {
+    let newAmountTokenB = parseFloat(value as string).toString();
+    if (newAmountTokenB === "NaN") newAmountTokenB = "0";
+    setTokenAmountB(newAmountTokenB);
+    if (liquidity && pair) {
       const token1Price = pair.token1Price;
       const newAmountTokenA = Big(token1Price.toFixed()).mul(newAmountTokenB);
       setTokenAmountA(newAmountTokenA.toFixed());
