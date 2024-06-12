@@ -3,4 +3,5 @@ export const Page = {
   Empty: 2 ** 1,
   Supply: 2 ** 2,
   ChoosePair: 2 ** 3,
+  Management: 2 ** 4,
 };
