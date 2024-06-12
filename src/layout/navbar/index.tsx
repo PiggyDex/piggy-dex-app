@@ -113,7 +113,9 @@ export const Navbar: FC = () => {
           )}
           theme="dark"
           mode="inline"
-          defaultSelectedKeys={[pathname || PATH.PORTFOLIO]}
+          defaultSelectedKeys={[
+            pathname !== PATH.HOME ? pathname : PATH.PORTFOLIO,
+          ]}
           inlineCollapsed={collapsed}
           items={NavbarItems()}
           onClick={handleItemClick}
