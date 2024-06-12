@@ -204,23 +204,26 @@ export const Management: FC = () => {
             // TODO: change display token list
           }}
           tabBarExtraContent={
-            <div className="flex items-center gap-1 align-middle">
-              <Button className="flex items-center border-0 px-3 py-1">
-                Filter By Token
+            <div className="flex items-center gap-3 align-middle">
+              <Button className="flex h-auto items-center border-0 py-[6px] pl-3 pr-2">
+                <span className="text-xs leading-[120%]">Filter By Token</span>
                 <Image
                   src="/swap-more.svg"
                   alt="swap-more"
+                  className="object-cover"
                   width={24}
                   height={24}
                 />
               </Button>
               <Button
-                className="border-1 flex h-auto items-center justify-center gap-[10px] rounded-[10px] border-solid border-[#D2738B] bg-[#E1A1B1] px-6 py-[10px] text-[14px] text-[#D2738B] text-[700]"
+                className="flex h-auto items-center justify-center gap-[10px] rounded-[10px] border-none bg-primary-200 px-6 py-[10px]"
                 onClick={() => {
                   router.push("/portfolio/add");
                 }}
               >
-                Add Liquidity / Create Pool
+                <span className="text-sm font-bold not-italic leading-[120%] text-primary-700">
+                  Add Liquidity / Create Pool
+                </span>
               </Button>
             </div>
           }
