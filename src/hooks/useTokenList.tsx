@@ -105,8 +105,7 @@ const testnetTokenList: TokenInterface[] = [
     name: "Wrapped Bitcoin",
     decimals: 18,
     address: "0x54593e02c39aeff52b166bd036797d2b1478de8d",
-    logoURI:
-      "https://scanglobal.oss-cn-hongkong.aliyuncs.com/mainnet/0x6963efed0ab40f6c3d7bda44a05dcf1437c44372.png",
+    logoURI: "https://cryptologos.cc/logos/bitcoin-btc-logo.png",
   },
   {
     symbol: "xCFX",
@@ -123,4 +122,14 @@ export const useTokenList = (chainId: number) => {
     return { tokenList: mainnetTokenList };
   }
   return { tokenList: testnetTokenList };
+};
+
+export const useWrappedCFX = (chainId: number) => {
+  const { tokenList } = useTokenList(chainId);
+
+  const WCFX = tokenList.filter((token) => {
+    return token.symbol === "WCFX";
+  });
+
+  return { WCFX: WCFX[0] };
 };

@@ -6,7 +6,12 @@
 import { type FC } from "react";
 
 // import { portfolioPoolStateAtom } from "@/atoms";
-import { AddLiquidty, CustomConnectButton, Empty } from "@/components";
+import {
+  AddLiquidty,
+  CustomConnectButton,
+  Empty,
+  Management,
+} from "@/components";
 import { Page } from "@/constants";
 import { type TokenInterface } from "@/types";
 
@@ -36,6 +41,7 @@ export const PortfolioManagement: FC<PortfolioManagementProps> = ({
         </span>
         <CustomConnectButton className="relative right-0 top-0" />
       </div>
+      {(showPage & Page.Management) > 0 && <Management />}
       {(showPage & Page.Empty) > 0 && <Empty />}
       {(showPage & Page.AddLiquidity) > 0 && tokenA && tokenB && (
         <AddLiquidty showPage={Page.Supply} tokenA={tokenA} tokenB={tokenB} />

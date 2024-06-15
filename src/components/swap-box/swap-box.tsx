@@ -12,10 +12,16 @@ import IUniswapRouter02 from "@piggy-dex/v2-contracts/out/IUniswapV2Router02.sol
 import { Route, Trade } from "@piggy-dex/v2-sdk";
 import { Alert, Button, type InputNumberProps } from "antd";
 import { type valueType } from "antd/es/statistic/utils";
+import Big from "big.js";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { type FC, useEffect, useMemo, useState } from "react";
-import { useAccount, useChainId, useWriteContract } from "wagmi";
+import {
+  useAccount,
+  useChainId,
+  useWaitForTransactionReceipt,
+  useWriteContract,
+} from "wagmi";
 
 // eslint-disable-next-line import/extensions
 import WCFXABI from "@/abis/wcfx.json";
@@ -30,6 +36,7 @@ import {
   useFetchingPairData,
   useGetTokenBalance,
   useTokenList,
+  useWrappedCFX,
 } from "@/hooks";
 import { convertUnitToValue, convertValueToUnit } from "@/lib";
 import { type TokenInterface } from "@/types";
@@ -51,7 +58,7 @@ export const SwapBox: FC<SwapBoxProps> = ({ tokenA, tokenB }) => {
   const modal = useModal(SelectTokenModal);
   const router = useRouter();
 
-  const percentageValues = [25, 50, 75];
+  const percentageValues = [25, 50, 75, 100];
   const [isActives, setIsActives] = useState<boolean[]>(
     new Array(percentageValues.length).fill(false),
   );
@@ -103,7 +110,10 @@ export const SwapBox: FC<SwapBoxProps> = ({ tokenA, tokenB }) => {
     } else {
       setIsActives((prev) => prev.map((_, i) => (i === index ? true : false)));
       setTokenAmountA(
-        ((percentageValues[index] / 100) * parseInt(tokenAmountA)).toString(),
+        (
+          (percentageValues[index] / 100) *
+          parseInt(convertUnitToValue(tokenABalance, tokenA.decimals))
+        ).toString(),
       );
     }
   };
@@ -124,10 +134,18 @@ export const SwapBox: FC<SwapBoxProps> = ({ tokenA, tokenB }) => {
     tokensAmount,
   );
   const { address } = useAccount();
+  const { WCFX } = useWrappedCFX(chainId);
+  const [currentTx, setCurrentTx] = useState<`0x${string}` | undefined>(
+    undefined,
+  );
+
+  const { isFetching } = useWaitForTransactionReceipt({
+    hash: currentTx,
+  });
 
   const approveToken = async () => {
     if (chainId && address) {
-      await writeContractAsync({
+      const hash = await writeContractAsync({
         abi: erc20Abi,
         address: tokenA.address as `0x${string}`,
         functionName: "approve",
@@ -137,45 +155,54 @@ export const SwapBox: FC<SwapBoxProps> = ({ tokenA, tokenB }) => {
         ],
         account: address,
       });
+      setCurrentTx(hash);
     }
   };
 
   const wrapNativeToken = async () => {
     if (chainId && address) {
-      await writeContractAsync({
+      const hash = await writeContractAsync({
         abi: WCFXABI,
         address: tokenB.address as `0x${string}`,
         functionName: "deposit",
         account: address,
         value: BigInt(convertValueToUnit(tokenAmountA, tokenA.decimals)),
       });
+      setCurrentTx(hash);
     }
   };
 
   const unwrapNativeToken = async () => {
     if (chainId && address) {
-      await writeContractAsync({
+      const hash = await writeContractAsync({
         abi: WCFXABI,
         address: tokenA.address as `0x${string}`,
         functionName: "withdraw",
         args: [convertValueToUnit(tokenAmountA, tokenA.decimals)],
         account: address,
       });
+      setCurrentTx(hash);
     }
   };
 
   const handleSwap = async () => {
     if (tokenA.symbol === "CFX" && tokenB.symbol === "WCFX") {
-      wrapNativeToken();
+      await wrapNativeToken();
       return;
     }
     if (tokenA.symbol === "WCFX" && tokenB.symbol === "CFX") {
-      unwrapNativeToken();
+      await unwrapNativeToken();
       return;
     }
 
     // await a timeout
-    if (chainId && address && !isFetchingPairData && liquidity !== "0") {
+    if (
+      chainId &&
+      address &&
+      !isFetchingPairData &&
+      liquidity !== "0" &&
+      pair
+    ) {
       const route = new Route([pair], _tokenA, _tokenB);
       const trade = new Trade(
         route,
@@ -189,8 +216,8 @@ export const SwapBox: FC<SwapBoxProps> = ({ tokenA, tokenB }) => {
       const deadline = Math.floor(Date.now() / 1000) + 60 * 20; // 20 minutes from the current Unix time
 
       if (tokenA.symbol === "CFX") {
-        const path = [tokenB.address];
-        await writeContractAsync({
+        const path = [WCFX.address, tokenB.address];
+        const hash = await writeContractAsync({
           abi: uniswapRouter02Abi,
           address: V2_ROUTER_ADDRESSES[chainId] as `0x${string}`,
           functionName: "swapExactETHForTokens",
@@ -200,13 +227,19 @@ export const SwapBox: FC<SwapBoxProps> = ({ tokenA, tokenB }) => {
             address,
             deadline,
           ],
+          value: BigInt(
+            Big(tokenAmountA)
+              .mul(10 ** 18)
+              .toFixed(),
+          ),
         });
+        setCurrentTx(hash);
         return;
       }
 
       if (tokenB.symbol === "CFX") {
-        const path = [tokenA.address];
-        await writeContractAsync({
+        const path = [tokenA.address, WCFX.address];
+        const hash = await writeContractAsync({
           abi: uniswapRouter02Abi,
           address: V2_ROUTER_ADDRESSES[chainId] as `0x${string}`,
           functionName: "swapExactTokensForETH",
@@ -218,11 +251,12 @@ export const SwapBox: FC<SwapBoxProps> = ({ tokenA, tokenB }) => {
             deadline,
           ],
         });
+        setCurrentTx(hash);
         return;
       }
 
       const path = [tokenA.address, tokenB.address];
-      await writeContractAsync({
+      const hash = await writeContractAsync({
         abi: uniswapRouter02Abi,
         address: V2_ROUTER_ADDRESSES[chainId] as `0x${string}`,
         functionName: "swapExactTokensForTokens",
@@ -234,6 +268,7 @@ export const SwapBox: FC<SwapBoxProps> = ({ tokenA, tokenB }) => {
           deadline,
         ],
       });
+      setCurrentTx(hash);
     }
   };
 
@@ -257,7 +292,12 @@ export const SwapBox: FC<SwapBoxProps> = ({ tokenA, tokenB }) => {
   const slippageTolerance = new Percent("50", "100");
 
   useEffect(() => {
-    if (!isFetchingPairData && liquidity !== "0" && Number(tokenAmountA) > 0) {
+    if (
+      !isFetchingPairData &&
+      liquidity !== "0" &&
+      Number(tokenAmountA) > 0 &&
+      pair
+    ) {
       const output = pair.getOutputAmount(
         CurrencyAmount.fromRawAmount(
           _tokenA,
@@ -401,13 +441,14 @@ export const SwapBox: FC<SwapBoxProps> = ({ tokenA, tokenB }) => {
         {!isLoadingApproval &&
         allAproved.includes(false) &&
         !(tokenA.symbol === "CFX" && tokenB.symbol === "WCFX") &&
-        !(tokenA.symbol === "WCFX" && tokenB.symbol === "CFX") ? (
+        !(tokenA.symbol === "WCFX" && tokenB.symbol === "CFX") &&
+        tokenA.symbol !== "CFX" ? (
           <Button
             className="flex h-auto items-center justify-center gap-[10px] rounded-[10px] border-0 bg-primary-200 px-14 py-[10px] text-primary-900 hover:bg-primary-400"
             onClick={approveToken}
           >
             <span className="text-[16px] font-[700] leading-[19.2px]">
-              Approve
+              {!isFetching ? "Approve" : "Waiting for confirmation..."}
             </span>
           </Button>
         ) : (
@@ -415,10 +456,16 @@ export const SwapBox: FC<SwapBoxProps> = ({ tokenA, tokenB }) => {
             handleSwap={handleSwap}
             text={
               tokenA.symbol === "CFX" && tokenB.symbol === "WCFX"
-                ? "Wrap"
+                ? !isFetching
+                  ? "Wrap"
+                  : "Waiting for confirmation..."
                 : tokenA.symbol === "WCFX" && tokenB.symbol === "CFX"
-                  ? "Unwrap"
-                  : "Swap Now"
+                  ? !isFetching
+                    ? "Unwrap"
+                    : "Waiting for confirmation..."
+                  : !isFetching
+                    ? "Swap Now"
+                    : "Waiting for confirmation..."
             }
           />
         )}

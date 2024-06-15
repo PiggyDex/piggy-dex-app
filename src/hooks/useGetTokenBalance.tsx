@@ -21,15 +21,19 @@ export const useGetTokenBalance = (token: TokenInterface): string => {
     const fetchBalance = async () => {
       if (isConnected) {
         if (token.address !== NATIVE_TOKEN_ADDRESS) {
-          const result = await readContract(config, {
-            abi: erc20Abi,
-            address: token.address as `0x${string}`,
-            functionName: "balanceOf",
-            args: [address],
-          });
-          // Convert the result to a Big instance and then call toFixed
-          const balanceInBig = new Big((result as Big).toString());
-          setBalance(balanceInBig.toFixed(9));
+          try {
+            const result = await readContract(config, {
+              abi: erc20Abi,
+              address: token.address as `0x${string}`,
+              functionName: "balanceOf",
+              args: [address],
+            });
+            // Convert the result to a Big instance and then call toFixed
+            const balanceInBig = new Big((result as Big).toString());
+            setBalance(balanceInBig.toFixed(9));
+          } catch (error) {
+            setBalance("0");
+          }
         } else {
           if (address) {
             const result = await getBalance(config, {
